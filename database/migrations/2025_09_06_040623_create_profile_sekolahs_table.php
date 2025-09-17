@@ -15,13 +15,16 @@ return new class extends Migration
             $table->id();
             $table->string('nama_sekolah');
             $table->string('npsn')->nullable();
+            $table->string('akreditasi')->nullable();
             $table->string('no_telp')->nullable();
             $table->string('email')->nullable();
             $table->text('alamat')->nullable();
             $table->string('visi')->nullable();
             $table->text('misi')->nullable();
             $table->string('kepala_sekolah')->nullable();
+            $table->text('sambutan_kepala_sekolah')->nullable();
             $table->string('foto_sekolah')->nullable();
+            $table->string('foto_kepala_sekolah')->nullable();
             $table->timestamps();
         });
     }

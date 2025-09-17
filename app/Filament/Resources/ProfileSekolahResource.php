@@ -20,6 +20,12 @@ class ProfileSekolahResource extends Resource
 
     protected static ?string $navigationLabel = 'Profile Sekolah';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?int $navigationSort = 2;
+
+    public static function getPluralLabel(): string
+    {
+        return 'Profile Sekolah';
+    }
 
     public static function form(Form $form): Form
     {
@@ -27,8 +33,11 @@ class ProfileSekolahResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nama_sekolah')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('npsn')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('akreditasi')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('no_telp')
                     ->tel()
@@ -36,19 +45,25 @@ class ProfileSekolahResource extends Resource
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->maxLength(255),
-                Forms\Components\Textarea::make('alamat')
-                    ->columnSpanFull(),
+                Forms\Components\Textarea::make('alamat'),
                 Forms\Components\TextInput::make('visi')
                     ->maxLength(255)
                     ->columnSpanFull(),
                 Forms\Components\RichEditor::make('misi')
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('kepala_sekolah')
-                    ->maxLength(255),
                 Forms\Components\FileUpload::make('foto_sekolah')
                     ->image()
                     ->imageEditor()
+                    ->maxSize(1024)
+                    ->columnSpanFull(),
+                Forms\Components\TextInput::make('kepala_sekolah')
+                    ->maxLength(255),
+                Forms\Components\FileUpload::make('foto_kepala_sekolah')
+                    ->image()
+                    ->imageEditor()
                     ->maxSize(1024),
+                Forms\Components\RichEditor::make('sambutan_kepala_sekolah')
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -79,6 +94,8 @@ class ProfileSekolahResource extends Resource
                     ->searchable(),
                 Tables\Columns\ImageColumn::make('foto_sekolah')
                     ->searchable()
+                    ->circular()
+                    ->size(50)
                     ->url(fn(ProfileSekolah $record) => $record->foto_sekolah ? Storage::url($record->foto_sekolah) : null),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
