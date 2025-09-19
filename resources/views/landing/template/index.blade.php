@@ -22,6 +22,7 @@
     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet" />
 
     <!-- Custom CSS (Minimal) -->
     <style>
@@ -130,7 +131,8 @@
         <div class="container">
             <div class="row g-4">
                 <div class="col-lg-4 col-md-6" data-aos="fade-up">
-                    <h5 class="fw-bold mb-3">Tentang [Nama Sekolah]</h5>
+                    <h5 class="fw-bold mb-3">Tentang {{ $profileSekolah->nama_sekolah ?? 'SMK Teknologi Informasi' }}
+                    </h5>
                     <p class="text-white-50">SMK Teknologi Informasi berkomitmen mencetak lulusan siap kerja yang
                         kompeten, kreatif, dan berakhlak mulia.</p>
                 </div>
@@ -164,7 +166,8 @@
             </div>
             <hr class="my-4">
             <div class="text-white-50 text-center">
-                <p>&copy; 2024 [Nama Sekolah]. All Rights Reserved.</p>
+                <p>&copy; 2024 {{ $profileSekolah->nama_sekolah ?? 'SMK Teknologi Informasi' }}. All Rights Reserved.
+                </p>
             </div>
         </div>
     </footer>
@@ -172,6 +175,7 @@
 
     <!-- Bootstrap JS -->
     <script src="{{ asset('assets/template_bs/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <!-- AOS JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -197,6 +201,9 @@
             }
         };
     </script>
+    @stack('script')
+
+
 </body>
 
 </html>

@@ -2,152 +2,106 @@
 
 @section('title', $berita->judul)
 
-
 @section('content')
+    <!-- Hero Thumbnail -->
+    <section class="position-relative bg-dark text-white">
+        @if ($berita->thumbnail)
+            <img class="w-100 object-fit-cover" src="{{ Storage::url($berita->thumbnail) }}" alt="{{ $berita->judul }}"
+                style="max-height: 420px; opacity: 0.4;">
+        @endif
+        <div class="position-absolute top-50 start-50 translate-middle px-3 text-center">
+            <h1 class="fw-bold display-5">{{ $berita->judul }}</h1>
+            <div class="text-white-50 small mt-2">
+                <i class="bi bi-person-circle me-1"></i> {{ $berita->user->name ?? 'Admin' }}
+                <span class="mx-2">•</span>
+                <i class="bi bi-calendar-event me-1"></i>
+                {{ \Carbon\Carbon::parse($berita->tanggal_publikasi)->translatedFormat('d F Y') }}
+                <span class="mx-2">•</span>
+                <i class="bi bi-eye me-1"></i> {{ number_format($berita->views) }}x dibaca
+            </div>
+        </div>
+    </section>
+
+    <!-- Konten -->
     <section class="bg-body-tertiary py-5">
         <div class="container">
-            {{-- BARU: Breadcrumb untuk navigasi --}}
-            <nav class="mb-4" aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/">Home</a></li>
-                    <li class="breadcrumb-item"><a href="/berita">Berita</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ Str::limit($berita->judul, 30) }}</li>
-                </ol>
-            </nav>
-
             <div class="row g-5">
-
-                {{-- Kolom Konten Utama --}}
+                <!-- Artikel -->
                 <div class="col-lg-8">
-                    <div class="card p-md-5 border-0 p-4 shadow-sm">
-                        <header class="mb-4">
-                            <h1 class="fw-bolder display-5 mb-3">{{ $berita->judul }}</h1>
-                            <div class="text-muted small d-flex align-items-center flex-wrap">
-                                <span><i class="bi bi-person-fill me-1"></i> Oleh {{ $berita->pembuat->name }}</span>
-                                <span class="mx-2">&middot;</span>
-                                <span><i class="bi bi-calendar3 me-1"></i>
-                                    {{ \Carbon\Carbon::parse($berita->tanggal_publikasi)->translatedFormat('d F Y') }}</span>
-                                <span class="mx-2">&middot;</span>
-                                <span><i class="bi bi-eye-fill me-1"></i> {{ $berita->views }} kali dilihat</span>
-                            </div>
-                        </header>
-
-                        <figure class="mb-4">
-                            <img class="img-fluid rounded"
-                                src="{{ $berita->thumbnail ? Storage::url($berita->thumbnail) : 'https://placehold.co/900x400/6c757d/fff?text=Thumbnail+Berita' }}"
-                                alt="{{ $berita->judul }}">
-                        </figure>
-
-                        {{-- DIUBAH: Menambahkan class 'article-content' untuk styling --}}
-                        <article class="fs-5 lh-lg article-content mb-5">
+                    <article class="p-md-5 rounded bg-white p-4 shadow-sm">
+                        <!-- Isi Berita -->
+                        <div class="lh-lg fs-5 text-dark mb-4">
                             {!! $berita->isi_berita !!}
-                        </article>
-
-                        {{-- BARU: Bagian Tags/Topik --}}
-                        <div class="mb-5">
-                            <h6 class="fw-bold">Tags:</h6>
-                            <a class="btn btn-sm btn-outline-secondary mb-1" href="#">Pendidikan</a>
-                            <a class="btn btn-sm btn-outline-secondary mb-1" href="#">SMK</a>
-                            <a class="btn btn-sm btn-outline-secondary mb-1" href="#">Teknologi</a>
                         </div>
 
-                        <div class="border-top pt-4">
-                            {{-- BARU: Kotak Profil Penulis --}}
-                            <div class="author-box d-flex align-items-center mb-5 rounded p-3">
-                                <div class="flex-shrink-0">
-                                    <img class="author-avatar rounded-circle"
-                                        src="https://i.pravatar.cc/150?u={{ $berita->pembuat->email }}"
-                                        alt="{{ $berita->pembuat->name }}">
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <h6 class="fw-bold mb-0">{{ $berita->pembuat->name }}</h6>
-                                    <p class="small text-muted mb-0">Penulis adalah seorang pengajar dengan fokus pada
-                                        pengembangan kurikulum digital di sekolah kejuruan.</p>
-                                </div>
+                        <!-- Galeri -->
+                        @if ($berita->galeris && $berita->galeris->count() > 0)
+                            <h5 class="fw-bold mb-3"><i class="bi bi-images text-success me-2"></i> Galeri</h5>
+                            <div class="row g-3 mb-4">
+                                @foreach ($berita->galeris as $galeri)
+                                    <div class="col-md-4 col-sm-6">
+                                        <img class="img-fluid rounded shadow-sm" src="{{ Storage::url($galeri->gambar) }}"
+                                            alt="Galeri {{ $loop->iteration }}">
+                                    </div>
+                                @endforeach
                             </div>
+                        @endif
 
-                            {{-- Galeri Terkait --}}
-                            @if ($berita->galeris->count() > 0)
-                                <h4 class="fw-bold mb-3">Galeri Terkait</h4>
-                                <div class="row g-3">
-                                    @foreach ($berita->galeris as $item)
-                                        <div class="col-lg-4 col-md-6">
-                                            {{-- DIUBAH DI SINI --}}
-                                            <a class="d-block overflow-hidden rounded shadow-sm"
-                                                data-lightbox="news-gallery"
-                                                data-title="{{ $item->keterangan ?? 'Galeri ' . $loop->iteration }}"
-                                                href="{{ Storage::url($item->gambar) }}">
-
-                                                {{-- 1. Bungkus gambar dengan div ratio --}}
-                                                <div class="ratio ratio-4x3">
-                                                    {{-- 2. Tambahkan class object-fit-cover pada gambar --}}
-                                                    <img class="object-fit-cover" src="{{ Storage::url($item->gambar) }}"
-                                                        alt="{{ $item->keterangan ?? 'Galeri ' . $loop->iteration }}">
-                                                </div>
-                                            </a>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @endif
+                        <!-- Share Sosial -->
+                        <div class="border-top pt-3">
+                            <h6 class="fw-bold mb-3"><i class="bi bi-share-fill me-1"></i> Bagikan Artikel:</h6>
+                            <div class="d-flex gap-2">
+                                <a class="btn btn-sm btn-primary"
+                                    href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->fullUrl()) }}"
+                                    target="_blank">
+                                    <i class="bi bi-facebook"></i> Facebook
+                                </a>
+                                <a class="btn btn-sm btn-info text-white"
+                                    href="https://twitter.com/intent/tweet?url={{ urlencode(request()->fullUrl()) }}"
+                                    target="_blank">
+                                    <i class="bi bi-twitter-x"></i> Twitter
+                                </a>
+                                <a class="btn btn-sm btn-success"
+                                    href="https://wa.me/?text={{ urlencode($berita->judul . ' - ' . request()->fullUrl()) }}"
+                                    target="_blank">
+                                    <i class="bi bi-whatsapp"></i> WhatsApp
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    </article>
                 </div>
 
-                {{-- Sidebar --}}
+                <!-- Sidebar -->
                 <div class="col-lg-4">
-                    <div class="sticky-top" style="top: 2rem;">
-                        {{-- BARU: Widget Pencarian --}}
-                        <div class="card mb-4 border-0 shadow-sm">
-                            <div class="card-header bg-primary fw-bold text-white">Pencarian</div>
-                            <div class="card-body">
-                                <div class="input-group">
-                                    <input class="form-control" type="text" placeholder="Cari berita...">
-                                    <button class="btn btn-primary" type="button"><i class="bi bi-search"></i></button>
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="fw-bold mb-3">
+                                <i class="bi bi-newspaper text-danger me-2"></i> Berita Terbaru
+                            </h5>
+                            @forelse (\App\Models\Berita::where('status', 'publikasi')->latest()->take(5)->get() as $item)
+                                <div class="d-flex mb-3">
+                                    @if ($item->thumbnail)
+                                        <img class="me-3 rounded" src="{{ Storage::url($item->thumbnail) }}"
+                                            alt="{{ $item->judul }}"
+                                            style="width: 80px; height: 60px; object-fit: cover;">
+                                    @endif
+                                    <div>
+                                        <a class="fw-semibold text-decoration-none text-dark"
+                                            href="{{ route('berita.detail', $item->slug) }}">
+                                            {{ Str::limit($item->judul, 60) }}
+                                        </a>
+                                        <div class="small text-muted">
+                                            <i class="bi bi-calendar-event me-1"></i>
+                                            {{ \Carbon\Carbon::parse($item->tanggal_publikasi)->translatedFormat('d M Y') }}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        {{-- BARU: Widget Kategori --}}
-                        <div class="card mb-4 border-0 shadow-sm">
-                            <div class="card-header bg-primary fw-bold text-white">Kategori</div>
-                            <div class="list-group list-group-flush">
-                                <a class="list-group-item list-group-item-action" href="#">Kurikulum</a>
-                                <a class="list-group-item list-group-item-action" href="#">Prestasi Siswa</a>
-                                <a class="list-group-item list-group-item-action" href="#">Info Sekolah</a>
-                                <a class="list-group-item list-group-item-action" href="#">Ekstrakurikuler</a>
-                            </div>
-                        </div>
-
-                        {{-- Widget Berita Populer (Sudah ada) --}}
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-header bg-primary fw-bold text-white">Berita Populer</div>
-                            <div class="list-group list-group-flush">
-                                @forelse ($beritas as $lain)
-                                    <a class="list-group-item list-group-item-action d-flex align-items-center p-3"
-                                        href="{{ route('berita.detail', $lain->slug) }}">
-                                        <div class="flex-shrink-0">
-                                            <div class="ratio ratio-1x1 overflow-hidden rounded" style="width: 70px;">
-                                                <img class="object-fit-cover"
-                                                    src="{{ $lain->thumbnail ? Storage::url($lain->thumbnail) : 'https://placehold.co/100x100/6c757d/fff?text=...' }}"
-                                                    alt="{{ $lain->judul }}">
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="fw-bold mb-1">{{ Str::limit($lain->judul, 50) }}</h6>
-                                            <small class="text-muted d-flex justify-content-between">
-                                                <span>{{ \Carbon\Carbon::parse($lain->tanggal_publikasi)->diffForHumans() }}</span>
-                                                <span><i class="bi bi-eye-fill"></i> {{ $lain->views }}</span>
-                                            </small>
-                                        </div>
-                                    </a>
-                                @empty
-                                    <div class="list-group-item">Tidak ada berita lain.</div>
-                                @endforelse
-                            </div>
+                            @empty
+                                <div class="text-muted small">Belum ada berita lainnya.</div>
+                            @endforelse
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>

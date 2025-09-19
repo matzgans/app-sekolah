@@ -7,6 +7,7 @@ use App\Models\Ekstrakurikuler;
 use App\Models\Fasilitas;
 use App\Models\Galeri;
 use App\Models\Jurusan;
+use App\Models\Pengumuman;
 use App\Models\Prestasi;
 use App\Models\ProfileSekolah;
 
@@ -25,14 +26,15 @@ class LandingController extends Controller
         $title = $profileSekolah->nama_sekolah;
         $jurusans = Jurusan::all();
         $fasilitas = Fasilitas::all();
-        $ekstrakurikuler = Ekstrakurikuler::all();
+        $ekstrakurikuler = Ekstrakurikuler::paginate(6);
         $prestasis = Prestasi::orderByRaw("
     FIELD(tingkat, 'internasional','nasional','provinsi','kota','sekolah')
 ")->get();
+        $jumlahJurusan = Jurusan::count();
 
         // ambil berita utama (random dari yang terbaru atau terbanyak dilihat)
         $featured = Berita::where('status', 'publikasi')
-            ->orderByRaw("RAND()") // kalau mau random
+            ->inRandomOrder()
             ->first();
 
         // sisanya (kecuali berita featured)
@@ -42,7 +44,8 @@ class LandingController extends Controller
             ->take(5) // misalnya ambil 5 list
             ->get();
 
-        $galeris = Galeri::all();
+        $galeris = Galeri::paginate(6);
+        $pengumuman = Pengumuman::inRandomOrder()->first();
 
         return view('landing.pages.home', compact(
             'title',
@@ -59,16 +62,19 @@ class LandingController extends Controller
             'prestasis',
             'beritas',
             'featured',
-            'galeris'
+            'galeris',
+            'jumlahJurusan',
+            'pengumuman'
         ));
     }
 
     public function berita($slug)
     {
+        Berita::where('slug', $slug)->increment('views');
+
         $berita = Berita::where('slug', $slug)->first();
-        $title = $berita->judul;
-        $beritas = Berita::where('status', 'publikasi')->orderBy('tanggal_publikasi', 'desc')->get();
-        return view('landing.pages.detail-berita', compact('berita', 'title', 'beritas'));
+
+        return view('landing.pages.detail-berita', compact('berita'));
     }
 
     public function prestasi($slug)
@@ -81,19 +87,10 @@ class LandingController extends Controller
 
     public function jurusan($slug)
     {
-        $berita = Berita::where('slug', $slug)->first();
-        $berita->increment('views');
-        $beritasPopuler = Berita::where('status', 'publikasi')
-            ->where('id', '!=', $berita->id) // Kunci agar berita saat ini tidak muncul lagi
-            ->orderBy('views', 'desc')
-            ->take(5)
-            ->get();
 
-        // 3. Kirim kedua variabel tersebut ke view
-        return view('landing.pages.detail-berita', [
-            'berita' => $berita,
-            'title' => $berita->judul,
-            'beritas' => $beritasPopuler // Variabel ini yang akan di-loop di sidebar
-        ]);
+        $jurusan = Jurusan::where('slug', $slug)->first();
+        $title = $jurusan->nama_jurusan;
+        $jurusans = Jurusan::all();
+        return view('landing.pages.detail-jurusan', compact('jurusan', 'title', 'jurusans'));
     }
 }

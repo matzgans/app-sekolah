@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('berita', function (Blueprint $table) {
+        Schema::create('pengumuman', function (Blueprint $table) {
             $table->id();
             $table->string('judul');
-            $table->text('isi_berita');
-            $table->string('thumbnail')->nullable();
-            $table->bigInteger('views')->default(0);
-            $table->date('tanggal_publikasi')->nullable();
-            $table->string('slug');
-            $table->foreignId('user_id')->constrained('users');
+            $table->text('deskripsi');
+            $table->foreignId('user_id')->constrained('users')->nullable();
+            $table->enum('tipe', ['informasi', 'kegiatan', 'akademik', 'lainnya']);
+            $table->string('gambar')->nullable();
             $table->enum('status', ['draf', 'publikasi']);
             $table->timestamps();
         });
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('berita');
+        Schema::dropIfExists('pengumuman');
     }
 };

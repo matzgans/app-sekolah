@@ -132,7 +132,7 @@
                 </div>
                 <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
                     <i class="bi bi-journal-bookmark-fill display-4"></i>
-                    <h3 class="display-5 fw-bold mt-2">5</h3>
+                    <h3 class="display-5 fw-bold mt-2">{{ $jumlahJurusan ?? 0 }}</h3>
                     <p class="lead">Program Keahlian</p>
                 </div>
             </div>
@@ -144,31 +144,43 @@
         <div class="container">
             <div class="text-center" data-aos="fade-up">
                 <h2 class="display-5 fw-bold">Program Keahlian</h2>
-                <p class="lead text-muted mb-5">Temukan minat dan bakatmu melalui program keahlian unggulan kami.</p>
+                <p class="lead text-muted mb-5">
+                    Temukan minat dan bakatmu melalui program keahlian unggulan kami.
+                </p>
             </div>
-            <div class="row g-4">
-                <!-- Contoh Jurusan -->
-                @forelse ($jurusans as $jurusan)
-                    <a class="col-lg-3 col-md-6 text-decoration-none" data-aos="fade-up"
-                        href="{{ route('jurusan.detail', $jurusan->slug) }}">
-                        <div class="card card-hover h-100 border-0 p-3 text-center shadow-sm">
-                            <img class="rounded-circle mx-auto"
-                                src="{{ $jurusan->logo_jurusan ? Storage::url($jurusan->logo_jurusan) : 'https://placehold.co/100x100/343a40/fff?text=RPL' }}"
-                                alt="Logo" style="width: 100px; height: 100px;">
-                            <div class="card-body">
-                                <h5 class="fw-bold">{{ $jurusan->nama_jurusan }}</h5>
-                                <p class="small text-muted">Kepala Jurusan: {{ $jurusan->nama_kepala_jurusan }}</p>
-                            </div>
-                        </div>
-                    </a>
 
-                @empty
-                    <div class="col-12">
-                        <div class="alert alert-warning">Tidak ada program keahlian yang tersedia.</div>
-                    </div>
-                @endforelse
+            <!-- Swiper Wrapper -->
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    @forelse ($jurusans as $jurusan)
+                        <div class="swiper-slide d-flex">
+                            <a class="text-decoration-none d-block w-100"
+                                href="{{ route('jurusan.detail', $jurusan->slug) }}">
+                                <div class="card card-hover h-100 d-flex flex-column border-0 p-3 text-center shadow-sm"
+                                    style="min-height: 320px;">
+                                    <img class="rounded-circle mx-auto mb-3"
+                                        src="{{ $jurusan->logo_jurusan ? Storage::url($jurusan->logo_jurusan) : 'https://placehold.co/100x100/343a40/fff?text=RPL' }}"
+                                        alt="Logo" style="width: 100px; height: 100px;">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="fw-bold flex-grow-1 text-truncate text-wrap"
+                                            style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 48px;">
+                                            {{ $jurusan->nama_jurusan }}
+                                        </h5>
+                                        <p class="small text-muted">Kepala Jurusan: {{ $jurusan->nama_kepala_jurusan }}</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @empty
+                        <div class="swiper-slide">
+                            <div class="alert alert-warning">Tidak ada program keahlian yang tersedia.</div>
+                        </div>
+                    @endforelse
+                </div>
             </div>
         </div>
+    </section>
+
     </section>
 
     <!-- Fasilitas -->
@@ -179,39 +191,36 @@
                 <p class="lead text-muted mb-5">Kami menyediakan fasilitas terbaik untuk menunjang proses belajar.</p>
             </div>
 
-            <div class="row g-4">
-                @forelse ($fasilitas as $item)
-                    <div class="col-lg-4 col-md-6" data-aos="zoom-in-up" data-aos-delay="{{ $loop->iteration * 100 }}">
+            @if ($fasilitas->count())
+                <div class="swiper mySwiper-fasilitas">
+                    <div class="swiper-wrapper">
+                        @foreach ($fasilitas as $item)
+                            <div class="swiper-slide">
+                                <div class="card card-fasilitas h-100 overflow-hidden border-0 text-white shadow-sm">
+                                    {{-- Gambar --}}
+                                    <img class="card-img" src="{{ asset('storage/' . $item->foto_fasilitas) }}"
+                                        alt="{{ $item->nama_fasilitas }}" style="height: 250px; object-fit: cover;">
 
-                        {{-- Gunakan card Bootstrap sebagai dasar --}}
-                        <div class="card card-fasilitas overflow-hidden border-0 text-white shadow-sm">
-
-                            {{-- Gambar Fasilitas (akan di-zoom saat hover) --}}
-                            <img class="card-img" src="{{ asset('storage/' . $item->foto_fasilitas) }}"
-                                alt="{{ $item->nama_fasilitas }}">
-
-                            {{-- Overlay untuk nama dan deskripsi --}}
-                            <div class="card-img-overlay d-flex flex-column justify-content-end p-0">
-                                {{-- Konten overlay yang muncul saat hover --}}
-                                <div class="overlay-content h-100 d-flex flex-column justify-content-end p-4">
-                                    <h4 class="fw-bold">{{ $item->nama_fasilitas }}</h4>
-                                    <p class="card-text">{{ $item->deskripsi }}</p>
+                                    {{-- Overlay --}}
+                                    <div class="card-img-overlay d-flex flex-column justify-content-end p-0">
+                                        <div class="overlay-content h-100 d-flex flex-column justify-content-end p-4">
+                                            <h4 class="fw-bold">{{ $item->nama_fasilitas }}</h4>
+                                            <p class="card-text">{{ $item->deskripsi }}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-
-                        </div>
-
+                        @endforeach
                     </div>
-                @empty
-                    <div class="col-12">
-                        <div class="alert alert-warning text-center">
-                            Saat ini belum ada data fasilitas yang dapat ditampilkan.
-                        </div>
-                    </div>
-                @endforelse
-            </div>
+                </div>
+            @else
+                <div class="alert alert-warning text-center">
+                    Saat ini belum ada data fasilitas yang dapat ditampilkan.
+                </div>
+            @endif
         </div>
     </section>
+
 
     <!-- Ekstrakurikuler -->
     <section class="bg-light py-5" id="ekskul">
@@ -242,6 +251,8 @@
                         <div class="alert alert-warning">Tidak ada ekstrakurikuler yang tersedia.</div>
                     </div>
                 @endforelse
+                {{ $ekstrakurikuler->links() }}
+
             </div>
         </div>
     </section>
@@ -250,7 +261,7 @@
     <section class="py-5" id="prestasi">
         <div class="container">
             <div class="text-center" data-aos="fade-up">
-                <h2 class="display-5 fw-bold">Galeri Prestasi</h2>
+                <h2 class="display-5 fw-bold">Prestasi</h2>
                 <p class="lead text-muted mb-5">Berbagai pencapaian membanggakan dari siswa-siswi kami.</p>
             </div>
             <div class="row g-4">
@@ -307,9 +318,13 @@
             </div>
             <div class="row g-4">
                 @forelse ($galeris as $item)
-                    <div class="col-lg-4 col-md-6" data-aos="zoom-in"><a
-                            class="gallery-item d-block rounded-4 overflow-hidden shadow-sm" href="#"><img
-                                class="img-fluid" src="{{ Storage::url($item->gambar) }}" alt="Galeri 1"></a>
+                    <div class="col-lg-4 col-md-6 mb-4" data-aos="zoom-in">
+                        <a class="d-block rounded-4 ratio ratio-4x3 overflow-hidden shadow-sm" href="#"
+                            style="background-image: url('{{ Storage::url($item->gambar) }}'); background-size: cover; background-position: center;">
+
+
+
+                        </a>
                     </div>
                 @empty
                     <div class="col-12">
@@ -318,6 +333,8 @@
                         </div>
                     </div>
                 @endforelse
+                {{ $galeris->links() }}
+
             </div>
         </div>
     </section>
@@ -337,9 +354,25 @@
                             src="{{ $featured->thumbnail ? Storage::url($featured->thumbnail) : 'https://placehold.co/800x400/6c757d/fff?text=Berita+Utama' }}"
                             alt="{{ $featured->judul }}">
                         <div class="card-body p-4">
-                            <p class="small text-muted mb-2">{{ $featured->tanggal_publikasi }}</p>
+
+                            <div class="d-flex small text-muted mb-2 gap-3">
+                                <span>
+                                    <i class="bi bi-person"></i>
+                                    {{-- Tampilkan nama user, beri 'Anonim' jika user tidak ada --}}
+                                    {{ $featured->pembuat->name ?? 'Anonim' }}
+                                </span>
+                                <span>
+                                    <i class="bi bi-calendar-event"></i>
+                                    {{-- Format tanggal agar lebih mudah dibaca --}}
+                                    {{ \Carbon\Carbon::parse($featured->tanggal_publikasi)->translatedFormat('d F Y') }}
+                                </span>
+                                <span>
+                                    <i class="bi bi-eye"></i>
+                                    {{ $featured->views }} Dilihat
+                                </span>
+                            </div>
                             <h3 class="fw-bold">{{ $featured->judul }}</h3>
-                            <p class="card-text">{!! Str::limit($featured->isi_berita, 400) !!}</p>
+                            <p class="card-text">{!! Str::limit(strip_tags($featured->isi_berita), 300) !!}</p>
                             <a class="btn btn-primary mt-2" href="{{ route('berita.detail', $featured->slug) }}">Baca
                                 Selengkapnya</a>
                         </div>
@@ -364,4 +397,106 @@
             </div>
         </div>
     </section>
+
+    @if ($pengumuman)
+        <div class="modal fade" id="announcementModal" aria-labelledby="announcementModalLabel" aria-hidden="true"
+            tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="announcementModalLabel">{{ $pengumuman->judul }}</h5>
+                        <button class="btn-close" data-bs-dismiss="modal" type="button" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{-- Tampilkan gambar jika ada --}}
+                        @if ($pengumuman->gambar)
+                            <img class="img-fluid w-100 mb-3 rounded" src="{{ asset('storage/' . $pengumuman->gambar) }}"
+                                alt="Gambar Pengumuman">
+                        @endif
+
+                        {{-- Menampilkan tipe pengumuman sebagai badge --}}
+                        <p>
+                            <span class="badge bg-primary">{{ ucfirst($pengumuman->tipe) }}</span>
+                        </p>
+
+                        {{-- Deskripsi pengumuman, {!! !!} digunakan agar bisa render HTML jika ada --}}
+                        <div>
+                            {!! $pengumuman->deskripsi !!}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Langsung inisialisasi dan tampilkan modal tanpa pengecekan apa pun
+                const announcementModal = new bootstrap.Modal(document.getElementById('announcementModal'));
+                announcementModal.show();
+            });
+        </script>
+    @endif
 @endsection
+
+@push('script')
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+            slidesPerView: 4,
+            spaceBetween: 20,
+            loop: true,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+            speed: 1500,
+            autoHeight: true, // ✅ kontainer ikut tinggi slide
+            breakpoints: {
+                320: {
+                    slidesPerView: 1
+                },
+                576: {
+                    slidesPerView: 2
+                },
+                992: {
+                    slidesPerView: 3
+                },
+                1200: {
+                    slidesPerView: 4
+                }
+            }
+        });
+
+        var swiper = new Swiper(".mySwiper-fasilitas", {
+            slidesPerView: 4,
+            spaceBetween: 20,
+            loop: true,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+            speed: 1500,
+            autoHeight: true, // kontainer ikut tinggi slide
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            breakpoints: {
+                320: {
+                    slidesPerView: 1
+                },
+                576: {
+                    slidesPerView: 2
+                },
+                992: {
+                    slidesPerView: 3
+                },
+                1200: {
+                    slidesPerView: 4
+                }
+            }
+        });
+    </script>
+@endpush
