@@ -6,6 +6,7 @@ use App\Models\Berita;
 use App\Models\Ekstrakurikuler;
 use App\Models\Fasilitas;
 use App\Models\Galeri;
+use App\Models\Guru;
 use App\Models\Jurusan;
 use App\Models\Pengumuman;
 use App\Models\Prestasi;
@@ -46,6 +47,7 @@ class LandingController extends Controller
 
         $galeris = Galeri::paginate(6);
         $pengumuman = Pengumuman::inRandomOrder()->first();
+        $gurus = Guru::paginate(4);
 
         return view('landing.pages.home', compact(
             'title',
@@ -64,7 +66,8 @@ class LandingController extends Controller
             'featured',
             'galeris',
             'jumlahJurusan',
-            'pengumuman'
+            'pengumuman',
+            'gurus'
         ));
     }
 
