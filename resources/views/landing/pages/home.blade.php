@@ -509,8 +509,9 @@
 
                             <div class="ratio ratio-4x3">
                                 <img class="object-fit-cover w-100 h-100"
-                                    src="{{ $item->thumbnail ? Storage::url($item->thumbnail) : 'https://placehold.co/400x300/0d6efd/fff?text=Prestasi' }}"
-                                    alt="{{ $item->judul }}">
+                                    src="{{ optional($item)->thumbnail ? Storage::url(optional($item)->thumbnail) : 'https://placehold.co/400x300/0d6efd/fff?text=Prestasi' }}"
+                                    alt="{{ optional($item)->judul ?? 'Prestasi' }}">
+
                             </div>
 
                             @php
@@ -587,32 +588,36 @@
                 <!-- Berita Utama -->
                 <div class="col-lg-7">
                     <div class="card h-100 border-0 shadow-sm">
-                        <img class="card-img-top"
-                            src="{{ $featured->thumbnail ? Storage::url($featured->thumbnail) : 'https://placehold.co/800x400/6c757d/fff?text=Berita+Utama' }}"
-                            alt="{{ $featured->judul }}">
-                        <div class="card-body p-4">
+                        @if ($featured)
+                            <div class="card-body p-4">
 
-                            <div class="d-flex small text-muted mb-2 gap-3">
-                                <span>
-                                    <i class="bi bi-person"></i>
-                                    {{-- Tampilkan nama user, beri 'Anonim' jika user tidak ada --}}
-                                    {{ $featured->pembuat->name ?? 'Anonim' }}
-                                </span>
-                                <span>
-                                    <i class="bi bi-calendar-event"></i>
-                                    {{-- Format tanggal agar lebih mudah dibaca --}}
-                                    {{ \Carbon\Carbon::parse($featured->tanggal_publikasi)->translatedFormat('d F Y') }}
-                                </span>
-                                <span>
-                                    <i class="bi bi-eye"></i>
-                                    {{ $featured->views }} Dilihat
-                                </span>
+                                <div class="d-flex small text-muted mb-2 gap-3">
+                                    <span>
+                                        <i class="bi bi-person"></i>
+                                        {{-- Tampilkan nama user, beri 'Anonim' jika user tidak ada --}}
+                                        {{ $featured->pembuat->name ?? 'Anonim' }}
+                                    </span>
+                                    <span>
+                                        <i class="bi bi-calendar-event"></i>
+                                        {{-- Format tanggal agar lebih mudah dibaca --}}
+                                        {{ \Carbon\Carbon::parse($featured->tanggal_publikasi)->translatedFormat('d F Y') }}
+                                    </span>
+                                    <span>
+                                        <i class="bi bi-eye"></i>
+                                        {{ $featured->views }} Dilihat
+                                    </span>
+                                </div>
+                                <h3 class="fw-bold">{{ $featured->judul }}</h3>
+                                <p class="card-text">{!! Str::limit(strip_tags($featured->isi_berita), 300) !!}</p>
+                                <a class="btn btn-primary mt-2" href="{{ route('berita.detail', $featured->slug) }}">Baca
+                                    Selengkapnya</a>
                             </div>
-                            <h3 class="fw-bold">{{ $featured->judul }}</h3>
-                            <p class="card-text">{!! Str::limit(strip_tags($featured->isi_berita), 300) !!}</p>
-                            <a class="btn btn-primary mt-2" href="{{ route('berita.detail', $featured->slug) }}">Baca
-                                Selengkapnya</a>
-                        </div>
+                        @else
+                            <div class="card-body p-4">
+                                <div class="alert alert-warning">Tidak ada berita yang tersedia.</div>
+                            </div>
+                        @endif
+
                     </div>
                 </div>
 

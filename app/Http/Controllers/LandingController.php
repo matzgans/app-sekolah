@@ -18,20 +18,22 @@ class LandingController extends Controller
     public function index()
     {
         $profileSekolah = ProfileSekolah::first();
-        $visi = $profileSekolah->visi;
-        $misi = $profileSekolah->misi;
-        $kepalaSekolah = $profileSekolah->kepala_sekolah;
-        $fotoKepalaSekolah = $profileSekolah->foto_kepala_sekolah;
-        $akreditasi = $profileSekolah->akreditasi;
-        $fotoSekolah = $profileSekolah->foto_sekolah;
-        $sambutanKepalaSekolah = $profileSekolah->sambutan_kepala_sekolah;
-        $title = $profileSekolah->nama_sekolah;
+
+        $visi = $profileSekolah->visi ?? null;
+        $misi = $profileSekolah->misi ?? null;
+        $kepalaSekolah = $profileSekolah->kepala_sekolah ?? null;
+        $fotoKepalaSekolah = $profileSekolah->foto_kepala_sekolah ?? null;
+        $akreditasi = $profileSekolah->akreditasi ?? null;
+        $fotoSekolah = $profileSekolah->foto_sekolah ?? null;
+        $sambutanKepalaSekolah = $profileSekolah->sambutan_kepala_sekolah ?? null;
+        $title = $profileSekolah->nama_sekolah ?? 'Profil Sekolah';
+
         $jurusans = Jurusan::all();
         $fasilitas = Fasilitas::all();
         $ekstrakurikuler = Ekstrakurikuler::paginate(6);
         $prestasis = Prestasi::orderByRaw("
-    FIELD(tingkat, 'internasional','nasional','provinsi','kota','sekolah')
-")->get();
+            FIELD(tingkat, 'internasional','nasional','provinsi','kota','sekolah')
+        ")->get();
         $jumlahJurusan = Jurusan::count();
 
         // ambil berita utama (random dari yang terbaru atau terbanyak dilihat)
@@ -39,11 +41,11 @@ class LandingController extends Controller
             ->inRandomOrder()
             ->first();
 
-        // sisanya (kecuali berita featured)
+        // sisanya (kecuali berita featured jika ada)
         $beritas = Berita::where('status', 'publikasi')
-            ->where('id', '!=', $featured->id)
+            ->when($featured, fn($q) => $q->where('id', '!=', $featured->id))
             ->orderBy('tanggal_publikasi', 'desc')
-            ->take(5) // misalnya ambil 5 list
+            ->take(5)
             ->get();
 
         $galeris = Galeri::paginate(6);
@@ -73,6 +75,7 @@ class LandingController extends Controller
             'jumlahGuru'
         ));
     }
+
 
     public function berita($slug)
     {

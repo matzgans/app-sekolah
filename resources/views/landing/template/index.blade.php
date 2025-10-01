@@ -7,6 +7,9 @@
     <title>@yield('title')</title>
 
     <!-- Bootstrap CSS -->
+    <link type="image/x-icon"
+        href="{{ optional($profileSekolah)->logo_sekolah ? Storage::url(optional($profileSekolah)->logo_sekolah) : 'https://placehold.co/40x40/0d6efd/fff?text=Logo' }}"
+        rel="icon">
 
     <link href="{{ asset('assets/template_bs/css/bootstrap.min.css') }}" rel="stylesheet">
 
@@ -41,7 +44,7 @@
 
         /* Hero Section */
         .hero-section {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ $profileSekolah->foto_sekolah ? Storage::url($profileSekolah->foto_sekolah) : 'https://placehold.co/1920x1080/333/fff?text=Gedung+Sekolah' }}');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ optional($profileSekolah)->foto_sekolah ? Storage::url(optional($profileSekolah)->foto_sekolah) : 'https://placehold.co/1920x1080/333/fff?text=Gedung+Sekolah' }}');
             background-size: cover;
             background-position: center;
             height: 100vh;
@@ -79,9 +82,11 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="navbar">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#">
-                <i class="bi bi-building-fill me-2"></i>
-                {{ $profileSekolah->nama_sekolah }}
+            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
+                <img class="img-fluid"
+                    src="{{ optional($profileSekolah)->logo_sekolah ? Storage::url(optional($profileSekolah)->logo_sekolah) : 'https://placehold.co/40x40/0d6efd/fff?text=Logo' }}"
+                    alt="Logo" width="40">
+                <span class="fw-bold">{{ optional($profileSekolah)->nama_sekolah }}</span>
             </a>
             <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav" type="button"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

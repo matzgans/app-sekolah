@@ -56,6 +56,18 @@ class ProfileSekolahResource extends Resource
                     ->imageEditor()
                     ->maxSize(1024)
                     ->columnSpanFull(),
+                Forms\Components\FileUpload::make('logo_sekolah')
+                    ->image()
+                    ->imageEditor()
+                    ->maxSize(1024)
+                    ->columnSpanFull()
+                    ->getUploadedFileNameForStorageUsing(function ($file): string {
+                        // Ambil extension asli (png/jpg)
+                        $extension = $file->getClientOriginalExtension();
+
+                        // Pakai nama fix misalnya fixlogo.png
+                        return 'fixlogo.' . $extension;
+                    }),
                 Forms\Components\TextInput::make('kepala_sekolah')
                     ->maxLength(255),
                 Forms\Components\FileUpload::make('foto_kepala_sekolah')

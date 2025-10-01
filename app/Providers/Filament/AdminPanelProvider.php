@@ -21,6 +21,7 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
@@ -31,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
             // ->brandLogo(asset('assets/img/logo.png'))
             ->brandLogoHeight('3rem')
             ->brandName(view('filament.brand.brand'))
-            ->favicon(asset('assets/img/logo.png'))
+            ->favicon(Storage::url('fixlogo.png') ?? asset('assets/img/logofix.png'))
             ->default()
             ->profile()
             ->id('admin')

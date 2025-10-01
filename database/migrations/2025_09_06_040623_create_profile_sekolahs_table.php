@@ -25,6 +25,7 @@ return new class extends Migration
             $table->text('sambutan_kepala_sekolah')->nullable();
             $table->string('foto_sekolah')->nullable();
             $table->string('foto_kepala_sekolah')->nullable();
+            $table->string('logo_sekolah')->nullable();
             $table->timestamps();
         });
     }
