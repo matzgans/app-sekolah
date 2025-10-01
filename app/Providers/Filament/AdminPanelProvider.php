@@ -28,10 +28,10 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->brandName('SMK 1 SUWAWA')
-            ->brandLogo(asset('assets/img/logo.png'))
-            ->favicon(asset('assets/img/logo.png'))
+            // ->brandLogo(asset('assets/img/logo.png'))
             ->brandLogoHeight('3rem')
+            ->brandName(view('filament.brand.brand'))
+            ->favicon(asset('assets/img/logo.png'))
             ->default()
             ->profile()
             ->id('admin')

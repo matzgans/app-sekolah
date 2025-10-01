@@ -8,6 +8,7 @@ use App\Policies\PermissionPolicy;
 use App\Policies\ProfileSekolahPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
+use Filament\Facades\Filament;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
@@ -39,6 +40,8 @@ class AppServiceProvider extends ServiceProvider
             $profileSekolah = ProfileSekolah::first();
             $view->with('profileSekolah', $profileSekolah);
         });
+
+
 
         Paginator::useBootstrapFive();
     }
