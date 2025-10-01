@@ -20,4 +20,9 @@ class Pengumuman extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function jadwals()
+    {
+        return $this->morphMany(Jadwal::class, 'jadwalable');
+    }
 }

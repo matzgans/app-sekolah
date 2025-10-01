@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
+use App\Filament\Widgets\TotalGuruWidget;
 use App\Filament\Widgets\UserStatsWidget;
 use App\Filament\Widgets\WelcomeWidget;
 use Filament\Http\Middleware\Authenticate;
@@ -48,6 +49,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 WelcomeWidget::class,
                 UserStatsWidget::class,
+                TotalGuruWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -63,6 +65,9 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->plugin(FilamentSpatieRolesPermissionsPlugin::make());
+            // PINDAHKAN KE SINI DENGAN CARA YANG BENAR
+            ->plugins([
+                FilamentSpatieRolesPermissionsPlugin::make()
+            ]);
     }
 }

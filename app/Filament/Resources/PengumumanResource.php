@@ -20,6 +20,7 @@ class PengumumanResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Menejemen Konten';
     protected static ?string $navigationLabel = 'Pengumuman';
+
     protected static ?int $navigationSort = 8;
     public static function getPluralLabel(): string
     {
@@ -58,6 +59,31 @@ class PengumumanResource extends Resource
                 Forms\Components\Select::make('user_id')
                     ->required()
                     ->relationship('pembuat', 'name'),
+                Forms\Components\Repeater::make('jadwals')
+                    ->relationship('jadwals') // ini kunci, langsung simpan ke tabel jadwals
+                    ->schema([
+                        Forms\Components\Select::make('hari')
+                            ->options([
+                                'Senin' => 'Senin',
+                                'Selasa' => 'Selasa',
+                                'Rabu' => 'Rabu',
+                                'Kamis' => 'Kamis',
+                                'Jumat' => 'Jumat',
+                                'Sabtu' => 'Sabtu',
+                                'Minggu' => 'Minggu',
+                            ])
+                            ->required(),
+
+                        Forms\Components\TextInput::make('waktu')
+                            ->label('Waktu')
+                            ->placeholder('15:00 - 17:00')
+                            ->required(),
+
+                        Forms\Components\DatePicker::make('tanggal')
+                            ->label('Tanggal')
+                            ->native(false),
+                    ])
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -84,6 +110,15 @@ class PengumumanResource extends Resource
                     ->getStateUsing(function ($record) {
                         return $record->status === 'publikasi';
                     }),
+                Tables\Columns\TextColumn::make('jadwals')
+                    ->label('Jadwal')
+                    ->getStateUsing(function ($record) {
+                        return $record->jadwals
+                            ->map(fn($jadwal) => "{$jadwal->hari} ({$jadwal->waktu})")
+                            ->implode(', ');
+                    })
+                    ->wrap()
+                    ->searchable(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')

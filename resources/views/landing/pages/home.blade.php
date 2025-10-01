@@ -358,7 +358,7 @@
                 <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
                     <div class="stat-panel h-100">
                         <i class="bi bi-person-workspace display-4"></i>
-                        <h3 class="display-5 fw-bold mt-3">85</h3>
+                        <h3 class="display-5 fw-bold mt-3">{{ $jumlahGuru ?? 0 }}</h3>
                         <p class="lead mb-0 opacity-75">Guru Profesional</p>
                     </div>
                 </div>

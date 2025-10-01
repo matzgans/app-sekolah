@@ -7,6 +7,7 @@ use App\Models\Ekstrakurikuler;
 use App\Models\Fasilitas;
 use App\Models\Galeri;
 use App\Models\Guru;
+use App\Models\Jadwal;
 use App\Models\Jurusan;
 use App\Models\Pengumuman;
 use App\Models\Prestasi;
@@ -48,6 +49,7 @@ class LandingController extends Controller
         $galeris = Galeri::paginate(6);
         $pengumuman = Pengumuman::inRandomOrder()->first();
         $gurus = Guru::paginate(4);
+        $jumlahGuru = Guru::count();
 
         return view('landing.pages.home', compact(
             'title',
@@ -67,7 +69,8 @@ class LandingController extends Controller
             'galeris',
             'jumlahJurusan',
             'pengumuman',
-            'gurus'
+            'gurus',
+            'jumlahGuru'
         ));
     }
 
@@ -95,5 +98,50 @@ class LandingController extends Controller
         $title = $jurusan->nama_jurusan;
         $jurusans = Jurusan::all();
         return view('landing.pages.detail-jurusan', compact('jurusan', 'title', 'jurusans'));
+    }
+
+    public function kalender()
+    {
+        $jadwals = Jadwal::with('jadwalable')->get();
+
+        $events = $jadwals->map(function ($jadwal) {
+            if (!$jadwal->jadwalable || !$jadwal->tanggal) {
+                return null; // Lewati jika tidak ada relasi atau tanggal
+            }
+
+            // --- MULAI LOGIKA PEMBERSIHAN WAKTU ---
+
+            // 1. Ambil hanya waktu mulai (bagian sebelum tanda '-')
+            $waktuBagian = explode('-', $jadwal->waktu)[0]; // Contoh: "16.00 "
+
+            // 2. Hapus spasi kosong
+            $waktuBersih = trim($waktuBagian); // Contoh: "16.00"
+
+            // 3. Ganti titik dengan titik dua
+            $waktuFormat = str_replace('.', ':', $waktuBersih); // Contoh: "16:00"
+
+            // 4. Pastikan ada detik (opsional tapi aman)
+            if (substr_count($waktuFormat, ':') === 1) {
+                $waktuFormat .= ':00'; // Menjadi "16:00:00"
+            }
+
+            // --- SELESAI LOGIKA PEMBERSIHAN WAKTU ---
+
+            return [
+                'title' => $jadwal->jadwalable->judul ?? $jadwal->jadwalable->nama_ekskul,
+                // Gabungkan tanggal dengan waktu yang sudah diformat ulang
+                'start' => $jadwal->tanggal . 'T' . $waktuFormat,
+                'description' => $jadwal->jadwalable->deskripsi ?? 'Tidak ada deskripsi',
+                'tipe' => $jadwal->jadwalable->tipe ?? 'Tidak ada tipe',
+                'hari' => $jadwal->hari,
+                'waktu' => $jadwal->waktu,
+            ];
+        })->filter()->values();
+
+
+
+        return view('landing.pages.kalender', [
+            'events' => $events
+        ]);
     }
 }

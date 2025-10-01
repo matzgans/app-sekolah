@@ -94,28 +94,40 @@
                             href="{{ url('/') }}#home">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/') }}#tentang">Tentang</a>
+                        <a class="nav-link {{ request()->is('tentang') ? 'active' : '' }}"
+                            href="{{ url('/') }}#tentang">Tentang</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/') }}#jurusan">Jurusan</a>
+                        <a class="nav-link {{ request()->is('jurusan') ? 'active' : '' }}"
+                            href="{{ url('/') }}#jurusan">Jurusan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/') }}#fasilitas">Fasilitas</a>
+                        <a class="nav-link {{ request()->is('fasilitas') ? 'active' : '' }}"
+                            href="{{ url('/') }}#fasilitas">Fasilitas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/') }}#ekskul">Ekskul</a>
+                        <a class="nav-link {{ request()->is('ekskul') ? 'active' : '' }}"
+                            href="{{ url('/') }}#ekskul">Ekskul</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/') }}#prestasi">Prestasi</a>
+                        <a class="nav-link {{ request()->is('prestasi') ? 'active' : '' }}"
+                            href="{{ url('/') }}#prestasi">Prestasi</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/') }}#galeri">Galeri</a>
+                        <a class="nav-link {{ request()->is('galeri') ? 'active' : '' }}"
+                            href="{{ url('/') }}#galeri">Galeri</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/') }}#berita">Berita</a>
+                        <a class="nav-link {{ request()->is('berita') ? 'active' : '' }}"
+                            href="{{ url('/') }}#berita">Berita</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/') }}#kontak">Kontak</a>
+                        <a class="nav-link {{ request()->is('kontak') ? 'active' : '' }}"
+                            href="{{ url('/') }}#kontak">Kontak</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->is('kalender') ? 'active' : '' }}"
+                            href="{{ route('kalender') }}#kalender">Kalender</a>
                     </li>
                 </ul>
 

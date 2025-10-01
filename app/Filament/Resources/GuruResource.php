@@ -20,6 +20,13 @@ class GuruResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Menejemen Akademik';
     protected static ?string $navigationLabel = 'Guru';
+    protected static ?int $navigationSort = 10;
+
+
+    public static function getPluralLabel(): string
+    {
+        return 'Guru';
+    }
 
     public static function form(Form $form): Form
     {
