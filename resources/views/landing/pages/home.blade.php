@@ -560,8 +560,6 @@
                         <a class="d-block rounded-4 ratio ratio-4x3 overflow-hidden shadow-sm" href="#"
                             style="background-image: url('{{ Storage::url($item->gambar) }}'); background-size: cover; background-position: center;">
 
-
-
                         </a>
                     </div>
                 @empty
@@ -577,7 +575,7 @@
         </div>
     </section>
 
-    <!-- Berita -->
+    {{-- berita --}}
     <section class="py-5" id="berita">
         <div class="container">
             <div class="mb-5 text-center" data-aos="fade-up">
@@ -585,7 +583,6 @@
                 <p class="lead text-muted">Ikuti kegiatan dan informasi terbaru dari sekolah kami.</p>
             </div>
             <div class="row g-4">
-                <!-- Berita Utama -->
                 <div class="col-lg-7">
                     <div class="card h-100 border-0 shadow-sm">
                         @if ($featured)
@@ -607,6 +604,14 @@
                                         {{ $featured->views }} Dilihat
                                     </span>
                                 </div>
+
+                                {{-- Thumbnail --}}
+                                <div class="ratio ratio-16x9">
+                                    <img class="object-fit-cover w-100 h-100"
+                                        src="{{ $featured->thumbnail ? Storage::url($featured->thumbnail) : 'https://placehold.co/400x300/0d6efd/fff?text=Berita' }}"
+                                        alt="{{ $featured->judul }}">
+                                </div>
+
                                 <h3 class="fw-bold">{{ $featured->judul }}</h3>
                                 <p class="card-text">{!! Str::limit(strip_tags($featured->isi_berita), 300) !!}</p>
                                 <a class="btn btn-primary mt-2" href="{{ route('berita.detail', $featured->slug) }}">Baca
@@ -621,15 +626,19 @@
                     </div>
                 </div>
 
-                <!-- List Berita -->
                 <div class="col-lg-5">
                     @foreach ($beritas as $berita)
                         <div class="d-flex border-bottom mb-4 pb-3">
-                            <img class="me-3 rounded"
-                                src="{{ $berita->thumbnail ? Storage::url($berita->thumbnail) : 'https://placehold.co/150x100/6c757d/fff?text=Berita' }}"
-                                alt="{{ $berita->judul }}" width="150">
+
+                            <div class="me-3 flex-shrink-0" style="width: 150px; height: 100px;">
+                                <img class="w-100 h-100 object-fit-cover rounded"
+                                    src="{{ $berita->thumbnail ? Storage::url($berita->thumbnail) : 'https://placehold.co/150x100/6c757d/fff?text=Berita' }}"
+                                    alt="{{ $berita->judul }}">
+                            </div>
                             <div>
-                                <p class="small text-muted mb-1">{{ $berita->tanggal_publikasi }}</p>
+                                {{-- Ubah format tanggal agar lebih ringkas --}}
+                                <p class="small text-muted mb-1">
+                                    {{ \Carbon\Carbon::parse($berita->tanggal_publikasi)->translatedFormat('d F Y') }}</p>
                                 <h6 class="fw-bold mb-1">{{ $berita->judul }}</h6>
                                 <a class="small text-primary" href="{{ route('berita.detail', $berita->slug) }}">Baca
                                     Selengkapnya</a>
