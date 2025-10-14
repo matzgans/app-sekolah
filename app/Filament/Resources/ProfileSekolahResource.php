@@ -109,18 +109,7 @@ class ProfileSekolahResource extends Resource
                     ->circular()
                     ->size(50)
                     ->url(fn(ProfileSekolah $record) => $record->foto_sekolah ? Storage::url($record->foto_sekolah) : null),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->filters([
-                Tables\Filters\SelectFilter::make('nama_sekolah')
-                    ->options(ProfileSekolah::all()->pluck('nama_sekolah', 'id')),
+
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

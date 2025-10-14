@@ -64,20 +64,15 @@ class GuruResource extends Resource
                 Tables\Columns\ImageColumn::make('foto_guru'),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('jabatan')
-                    ->options([
-                        'guru' => 'Guru',
-                        'staff' => 'Staff',
-                    ]),
+                //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                //
             ]);
     }
 

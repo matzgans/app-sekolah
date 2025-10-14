@@ -41,6 +41,11 @@ class AppServiceProvider extends ServiceProvider
             $view->with('profileSekolah', $profileSekolah);
         });
 
+        View::composer('filament.brand.brand', function ($view) {
+            $profileSekolah = ProfileSekolah::first();
+            $view->with('profileSekolah', $profileSekolah);
+        });
+
 
 
         Paginator::useBootstrapFive();

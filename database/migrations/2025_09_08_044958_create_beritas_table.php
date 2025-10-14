@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('tanggal_publikasi')->nullable();
             $table->string('slug');
             $table->foreignId('user_id')->constrained('users');
-            $table->enum('status', ['draf', 'publikasi']);
+            $table->enum('status', ['draf', 'publikasi'])->default('draf');
             $table->timestamps();
         });
     }

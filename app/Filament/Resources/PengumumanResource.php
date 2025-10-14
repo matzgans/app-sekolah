@@ -50,7 +50,8 @@ class PengumumanResource extends Resource
                     ->options([
                         'draf' => 'Draf',
                         'publikasi' => 'Publikasi',
-                    ]),
+                    ])
+                    ->visible(fn() => auth()->user()?->hasRole('admin')),
                 Forms\Components\FileUpload::make('gambar')
                     ->image()
                     ->imageEditor()
@@ -58,7 +59,15 @@ class PengumumanResource extends Resource
 
                 Forms\Components\Select::make('user_id')
                     ->required()
-                    ->relationship('pembuat', 'name'),
+                    ->relationship('pembuat', 'name')
+                    ->visible(fn() => auth()->user()?->hasRole('admin')),
+
+                Forms\Components\FileUpload::make('file_pengumuman')
+                    ->maxSize(1024),
+
+                Forms\Components\TextInput::make('link')
+                    ->maxLength(255),
+
                 Forms\Components\Repeater::make('jadwals')
                     ->relationship('jadwals') // ini kunci, langsung simpan ke tabel jadwals
                     ->schema([
@@ -91,6 +100,8 @@ class PengumumanResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('No.')
+                    ->rowIndex(),
                 Tables\Columns\TextColumn::make('judul')->searchable(),
                 Tables\Columns\TextColumn::make('tipe'),
                 Tables\Columns\ToggleColumn::make('status')
@@ -98,6 +109,7 @@ class PengumumanResource extends Resource
                     ->offColor('danger')
                     ->onIcon('heroicon-s-check-circle')
                     ->offIcon('heroicon-s-x-circle')
+                    ->visible(fn() => auth()->user()?->hasRole('admin'))
                     ->tooltip(function ($record) {
                         return $record->status === 'publikasi'
                             ? 'Status: Publikasi. Klik untuk jadikan Draf.'
@@ -122,12 +134,12 @@ class PengumumanResource extends Resource
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
-                    ->options([
+                    ->options(fn() => [
                         'draf' => 'Draf',
                         'publikasi' => 'Publikasi',
                     ]),
                 Tables\Filters\SelectFilter::make('tipe')
-                    ->options([
+                    ->options(fn() => [
                         'informasi' => 'Informasi',
                         'kegiatan' => 'Kegiatan',
                         'akademik' => 'Akademik',
@@ -135,13 +147,12 @@ class PengumumanResource extends Resource
                     ]),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                //
             ]);
     }
 

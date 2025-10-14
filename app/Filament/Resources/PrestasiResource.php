@@ -83,14 +83,6 @@ class PrestasiResource extends Resource
                 Tables\Columns\ImageColumn::make('thumbnail')
                     ->circular()
                     ->size(50),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('tingkat')
@@ -105,6 +97,7 @@ class PrestasiResource extends Resource
                     ->options(Prestasi::all()->pluck('tahun', 'tahun')),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\Action::make('lihat_galeri')
@@ -121,9 +114,7 @@ class PrestasiResource extends Resource
 
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                //
             ]);
     }
 

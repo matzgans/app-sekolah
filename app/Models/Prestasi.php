@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Prestasi extends Model
@@ -25,6 +26,19 @@ class Prestasi extends Model
 
         static::updating(function ($prestasi) {
             $prestasi->slug = Str::slug($prestasi->judul);
+        });
+
+        static::deleting(function ($prestasi) {
+            if ($prestasi->thumbnail) {
+                Storage::disk('public')->delete($prestasi->thumbnail);
+            }
+
+            if ($prestasi->galeris) {
+                foreach ($prestasi->galeris as $galeri) {
+                    Storage::disk('public')->delete($galeri->gambar);
+                }
+                $prestasi->galeris()->delete();
+            }
         });
     }
 

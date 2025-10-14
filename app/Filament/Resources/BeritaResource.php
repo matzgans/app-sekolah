@@ -45,8 +45,8 @@ class BeritaResource extends Resource
                     ->options([
                         'draf' => 'Draf',
                         'publikasi' => 'Publikasi',
-                    ]),
-                Forms\Components\DateTimePicker::make('tanggal_publikasi'),
+                    ])->visible(fn() => auth()->user()?->hasRole('admin')),
+                Forms\Components\DateTimePicker::make('tanggal_publikasi')->visible(fn() => auth()->user()?->hasRole('admin')),
 
                 Forms\Components\Repeater::make('galeris')
                     ->label('Koleksi Gambar')
@@ -86,7 +86,8 @@ class BeritaResource extends Resource
                     })
                     ->getStateUsing(function ($record) {
                         return $record->status === 'publikasi';
-                    }),
+                    })
+                    ->visible(fn() => auth()->user()?->hasRole('admin')),
                 Tables\Columns\TextColumn::make('tanggal_publikasi'),
                 Tables\Columns\TextColumn::make('pembuat.name')->searchable(),
             ])
@@ -100,6 +101,7 @@ class BeritaResource extends Resource
                     ->options(User::all()->pluck('name', 'id')),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\Action::make('lihat_galeri')
@@ -115,9 +117,7 @@ class BeritaResource extends Resource
                     ->modalSubmitAction(false),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                //
             ]);
     }
 

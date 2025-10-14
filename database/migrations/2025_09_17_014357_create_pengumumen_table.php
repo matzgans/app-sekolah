@@ -14,11 +14,14 @@ return new class extends Migration
         Schema::create('pengumuman', function (Blueprint $table) {
             $table->id();
             $table->string('judul');
+            $table->string('slug');
             $table->text('deskripsi');
             $table->foreignId('user_id')->constrained('users')->nullable();
-            $table->enum('tipe', ['informasi', 'kegiatan', 'akademik', 'lainnya']);
+            $table->enum('tipe', ['informasi', 'kegiatan', 'akademik', 'lainnya'])->default('informasi');
             $table->string('gambar')->nullable();
-            $table->enum('status', ['draf', 'publikasi']);
+            $table->string('file_pengumuman')->nullable();
+            $table->string('link')->nullable();
+            $table->enum('status', ['draf', 'publikasi'])->default('draf');
             $table->timestamps();
         });
     }

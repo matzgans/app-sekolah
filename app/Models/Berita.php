@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Berita extends Model
@@ -30,6 +31,28 @@ class Berita extends Model
         static::updating(function ($berita) {
             $berita->slug = Str::slug($berita->judul);
             $berita->user_id = auth()->user()->id;
+
+            $original = $berita->getOriginal();
+
+            if (
+                isset($original['thumbnail']) &&
+                $original['thumbnail'] !== $berita->thumbnail
+            ) {
+                Storage::disk('public')->delete($original['thumbnail']);
+            }
+        });
+
+        static::deleting(function ($berita) {
+            if ($berita->thumbnail) {
+                Storage::disk('public')->delete($berita->thumbnail);
+            }
+
+            if ($berita->galeris) {
+                foreach ($berita->galeris as $galeri) {
+                    Storage::disk('public')->delete($galeri->gambar);
+                }
+                $berita->galeris()->delete();
+            }
         });
     }
 

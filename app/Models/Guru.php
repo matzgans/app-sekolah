@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Guru extends Model
@@ -27,6 +28,12 @@ class Guru extends Model
 
         static::updating(function ($guru) {
             $guru->slug = Str::slug($guru->nama_guru);
+        });
+
+        static::deleting(function ($guru) {
+            if ($guru->foto_guru) {
+                Storage::disk('public')->delete($guru->foto_guru);
+            }
         });
     }
 }

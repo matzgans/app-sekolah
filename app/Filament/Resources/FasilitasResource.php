@@ -36,8 +36,8 @@ class FasilitasResource extends Resource
                 Forms\Components\Select::make('status')
                     ->required()
                     ->options([
-                        'aktif' => 'Baik',
-                        'tidak_aktif' => 'Kurang Baik',
+                        'baik' => 'Baik',
+                        'kurang_baik' => 'Kurang Baik',
                         'rusak' => 'Rusak',
                     ]),
             ]);
@@ -57,8 +57,8 @@ class FasilitasResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
                     ->options([
-                        'aktif' => 'Baik',
-                        'tidak_aktif' => 'Kurang Baik',
+                        'baik' => 'Baik',
+                        'kurang_baik' => 'Kurang Baik',
                         'rusak' => 'Rusak',
                     ]),
             ])

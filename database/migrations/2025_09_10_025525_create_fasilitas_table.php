@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nama_fasilitas');
             $table->string('deskripsi');
             $table->string('foto_fasilitas');
-            $table->string('status');
+            $table->enum('status', ['baik', 'kurang_baik', 'rusak'])->default('baik');
             $table->timestamps();
         });
     }
