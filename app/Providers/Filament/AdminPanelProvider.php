@@ -6,6 +6,7 @@ use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugi
 use App\Filament\Widgets\TotalGuruWidget;
 use App\Filament\Widgets\UserStatsWidget;
 use App\Filament\Widgets\WelcomeWidget;
+use Filament\Actions\ExportsAction; // <-- INI DIA YANG BENAR
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -66,7 +67,6 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            // PINDAHKAN KE SINI DENGAN CARA YANG BENAR
             ->plugins([
                 FilamentSpatieRolesPermissionsPlugin::make()
             ]);

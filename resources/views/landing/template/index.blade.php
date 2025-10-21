@@ -134,6 +134,10 @@
                         <a class="nav-link {{ request()->is('kalender') ? 'active' : '' }}"
                             href="{{ route('kalender') }}#kalender">Kalender</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->is('pengaduan') ? 'active' : '' }}"
+                            href="{{ route('pengaduan') }}#pengaduan">Pengaduan</a>
+                    </li>
                 </ul>
 
             </div>

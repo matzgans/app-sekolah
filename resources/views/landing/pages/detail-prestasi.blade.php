@@ -3,47 +3,74 @@
 @section('title', $prestasi->judul)
 
 @section('content')
-    <!-- Detail Prestasi -->
     <section class="bg-light py-5">
         <div class="container">
             <div class="content p-md-5 rounded bg-white p-4 shadow-sm">
 
-                <!-- Judul -->
                 <h1 class="fw-bold mb-3 text-center">{{ $prestasi->judul }}</h1>
 
-                <!-- Meta -->
-                <p class="text-muted small mb-4 text-center">
-                    <i class="bi bi-calendar-event"></i> {{ $prestasi->tahun }}
-                </p>
-
-                <!-- Thumbnail -->
                 <div class="mb-4 text-center">
                     <img class="img-fluid rounded shadow-sm"
                         src="{{ $prestasi->thumbnail ? Storage::url($prestasi->thumbnail) : 'https://placehold.co/1000x500/6c757d/fff?text=Thumbnail+Prestasi' }}"
-                        alt="{{ $prestasi->judul }}">
+                        alt="{{ $prestasi->judul }}" style="max-height: 500px; object-fit: cover;">
                 </div>
 
-                <!-- Isi Prestasi -->
-                <article class="fs-6 lh-lg mb-5 text-justify">
-                    {!! $prestasi->deskripsi !!}
-                </article>
+                <div class="row g-4 mt-3">
 
-                <!-- Galeri -->
-                @if ($prestasi->galeris->count() > 0)
-                    <h5 class="fw-bold border-start border-primary mb-3 border-4 ps-3">Galeri Terkait</h5>
-                    <div class="row g-3">
-                        @foreach ($prestasi->galeris as $item)
-                            <div class="col-md-4 col-sm-6">
-                                <a href="{{ Storage::url($item->gambar) }}" target="_blank">
-                                    <img class="img-fluid hover-shadow rounded shadow-sm"
-                                        src="{{ Storage::url($item->gambar) }}" alt="Galeri {{ $loop->iteration }}">
-                                </a>
+                    <div class="col-lg-8">
+                        <h5 class="fw-bold border-start border-primary mb-3 border-4 ps-3">Deskripsi</h5>
+                        <article class="fs-6 lh-lg mb-5 text-justify">
+                            {!! $prestasi->deskripsi !!}
+                        </article>
+
+                        @if ($prestasi->galeris && $prestasi->galeris->count() > 0)
+                            <h5 class="fw-bold border-start border-primary mb-3 border-4 ps-3">Galeri Terkait</h5>
+                            <div class="row g-3">
+                                @foreach ($prestasi->galeris as $item)
+                                    <div class="col-md-4 col-sm-6">
+                                        <a data-gallery="prestasi-gallery" href="{{ Storage::url($item->gambar) }}"
+                                            target="_blank">
+                                            <img class="img-fluid hover-shadow w-100 rounded shadow-sm"
+                                                src="{{ Storage::url($item->gambar) }}" alt="Galeri {{ $loop->iteration }}"
+                                                style="height: 150px; object-fit: cover;">
+                                        </a>
+                                    </div>
+                                @endforeach
                             </div>
-                        @endforeach
+                        @endif
                     </div>
-                @endif
 
-                <!-- Navigasi ke Prestasi Lain -->
+                    <div class="col-lg-4">
+                        <div class="card position-sticky border-0 shadow-sm" style="top: 2rem;">
+                            <div class="card-header bg-primary rounded-top border-0 text-white">
+                                <h5 class="fw-bold mb-0"><i class="bi bi-info-circle-fill me-2"></i>Detail Prestasi</h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span class="text-muted small">Nama Siswa</span>
+                                    <strong class="text-end">{{ $prestasi->nama_siswa ?? 'N/A' }}</strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span class="text-muted small">Pembimbing</span>
+                                    <strong class="text-end">{{ $prestasi->nama_guru_pembimbing ?? 'N/A' }}</strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span class="text-muted small">Jenis Prestasi</span>
+                                    <strong class="text-end">{{ $prestasi->jenis_prestasi ?? 'N/A' }}</strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span class="text-muted small">Tingkat</span>
+                                    <strong class="text-end">{{ $prestasi->tingkat ?? 'N/A' }}</strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span class="text-muted small">Tahun</span>
+                                    <strong class="text-end">{{ $prestasi->tahun ?? 'N/A' }}</strong>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
                 <div class="border-top mt-5 pt-4">
                     <h6 class="fw-bold text-muted mb-3">Prestasi Lainnya</h6>
                     <div class="row row-cols-1 row-cols-md-3 g-3">
@@ -63,6 +90,7 @@
                         @endforeach
                     </div>
                 </div>
+
             </div>
         </div>
     </section>

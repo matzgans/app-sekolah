@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create('prestasi', function (Blueprint $table) {
             $table->id();
             $table->string('judul');
+            $table->string('nama_siswa');
+            $table->string('nama_guru_pembimbing');
             $table->text('deskripsi')->nullable();
             $table->enum('tingkat', ['sekolah', 'kota',  'provinsi', 'nasional', 'internasional']);
+            $table->enum('jenis_prestasi', ['akademik', 'non akademik', 'olahraga', 'seni', 'karya ilmiah', 'lainnya']);
             $table->year('tahun');
             $table->string('slug');
             $table->string('thumbnail')->nullable();

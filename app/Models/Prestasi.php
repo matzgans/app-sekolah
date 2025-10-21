@@ -15,6 +15,9 @@ class Prestasi extends Model
         'tingkat',
         'tahun',
         'slug',
+        'nama_siswa',
+        'nama_guru_pembimbing',
+        'jenis_prestasi',
         'thumbnail',
     ];
 

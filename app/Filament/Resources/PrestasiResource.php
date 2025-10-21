@@ -33,6 +33,22 @@ class PrestasiResource extends Resource
                 Forms\Components\TextInput::make('judul')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('nama_siswa')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('nama_guru_pembimbing')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\Select::make('jenis_prestasi')
+                    ->required()
+                    ->options([
+                        'akademik' => 'Akademik',
+                        'non akademik' => 'Non Akademik',
+                        'olahraga' => 'Olahraga',
+                        'seni' => 'Seni',
+                        'karya ilmiah' => 'Karya Ilmiah',
+                        'lainnya' => 'Lainnya',
+                    ]),
                 Forms\Components\Textarea::make('deskripsi')
                     ->required()
                     ->maxLength(255),
@@ -74,12 +90,16 @@ class PrestasiResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('No.')
                     ->rowIndex(),
+                Tables\Columns\TextColumn::make('nama_siswa')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('nama_guru_pembimbing')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('jenis_prestasi')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('judul')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('tingkat')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('tahun')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('tingkat'),
+                Tables\Columns\TextColumn::make('tahun'),
                 Tables\Columns\ImageColumn::make('thumbnail')
                     ->circular()
                     ->size(50),

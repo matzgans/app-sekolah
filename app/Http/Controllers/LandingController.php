@@ -147,4 +147,9 @@ class LandingController extends Controller
             'events' => $events
         ]);
     }
+
+    public function pengaduan()
+    {
+        return view('landing.pages.pengaduan');
+    }
 }
