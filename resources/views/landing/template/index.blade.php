@@ -136,7 +136,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('pengaduan') ? 'active' : '' }}"
-                            href="{{ route('pengaduan') }}#pengaduan">Pengaduan</a>
+                            href="{{ route('pengaduan.index') }}#pengaduan">Pengaduan</a>
                     </li>
                 </ul>
 

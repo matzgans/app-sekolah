@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Pengaduan\StorePengaduanRequest;
 use App\Models\Berita;
 use App\Models\Ekstrakurikuler;
 use App\Models\Fasilitas;
@@ -9,9 +10,11 @@ use App\Models\Galeri;
 use App\Models\Guru;
 use App\Models\Jadwal;
 use App\Models\Jurusan;
+use App\Models\Pengaduan;
 use App\Models\Pengumuman;
 use App\Models\Prestasi;
 use App\Models\ProfileSekolah;
+use Illuminate\Http\Request;
 
 class LandingController extends Controller
 {
@@ -148,8 +151,51 @@ class LandingController extends Controller
         ]);
     }
 
-    public function pengaduan()
+    public function pengaduan(Request $request) // Tambahkan Request $request
     {
-        return view('landing.pages.pengaduan');
+        $tiket = null;
+
+        if ($request->has('nomor_tiket')) {
+            $tiket = Pengaduan::where('no_tiket', $request->nomor_tiket)->first();
+        }
+
+        return view('landing.pages.pengaduan', ['tiket' => $tiket]);
+    }
+
+    public function store(StorePengaduanRequest $request)
+    {
+        $validated = $request->validated();
+
+        try {
+            if ($request->hasFile('file_pengaduan')) {
+                // Simpan file ke storage/app/public/uploads/pengaduan
+                $file_pengaduan = $request->file('file_pengaduan')->store('uploads/pengaduan', 'public');
+            } else {
+                $file_pengaduan = null;
+            }
+
+            $pengaduan = Pengaduan::create([
+                'nama_lengkap'       => $validated['nama_lengkap'],
+                'status_pengirim'    => $validated['status_pengirim'],
+                'kontak_pengirim'    => $validated['kontak_pengirim'],
+                'subjek'             => $validated['subjek'],
+                'isi_pesan'          => $validated['isi_pesan'],
+                'kategori_pengaduan' => $validated['kategori_pengaduan'],
+                'jenis_pengaduan'    => $validated['jenis_pengaduan'],
+                'file_pengaduan'     => $file_pengaduan,
+                'status_tiket'       => 'pending',
+                'no_tiket'           => 'Tiket-' . random_int(100000, 999999),
+                'tanggal_pengaduan'  => now(),
+                'user_id'            => auth()->id(),
+            ]);
+
+            return redirect()
+                ->route('pengaduan.index')
+                ->with('success', 'Pengaduan berhasil dikirim dengan nomor tiket: ' . $pengaduan->no_tiket);
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('pengaduan.index')
+                ->with('error', 'Pengaduan gagal dikirim: ' . $e->getMessage());
+        }
     }
 }

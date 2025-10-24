@@ -10,4 +10,9 @@ Route::get('/jurusan/{slug}', [LandingController::class, 'jurusan'])->name('juru
 Route::get('/kalender', [LandingController::class, 'kalender'])->name('kalender');
 
 
-Route::get('/pengaduan', [LandingController::class, 'pengaduan'])->name('pengaduan');
+Route::prefix('pengaduan')->group(function () {
+    Route::get('/', [LandingController::class, 'pengaduan'])->name('pengaduan.index');
+    Route::post('/store', [LandingController::class, 'store'])->name('pengaduan.store');
+    Route::get('/{nomor_tiket}', [LandingController::class, 'show'])->name('pengaduan.show');
+    Route::post('/{nomor_tiket}/balasan', [LandingController::class, 'storeBalasan'])->name('pengaduan.balasan.store');
+});
