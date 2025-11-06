@@ -10,8 +10,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\Alert;
 
 class JurusanResource extends Resource
 {
@@ -31,6 +30,7 @@ class JurusanResource extends Resource
     {
         return $form
             ->schema([
+                // Field-field ini dari kode Anda, sudah benar
                 Forms\Components\TextInput::make('nama_jurusan')
                     ->required()
                     ->maxLength(255),
@@ -41,12 +41,45 @@ class JurusanResource extends Resource
                     ->required()
                     ->columnSpanFull()
                     ->rows(10),
-
                 Forms\Components\FileUpload::make('logo_jurusan')
                     ->image()
                     ->imageEditor()
                     ->maxSize(1024)
                     ->columnSpanFull(),
+
+                Forms\Components\Section::make('Definisi Opsi Kurikulum')
+                    ->description('Tentukan opsi yang akan muncul di dropdown saat mengisi kurikulum.')
+                    ->collapsible()
+                    ->schema([
+                        Forms\Components\Repeater::make('kelompok_options')
+                            ->label('Opsi Kelompok Mata Pelajaran')
+                            ->schema([
+                                Forms\Components\TextInput::make('nama_kelompok')
+                                    ->label('Nama Kelompok')
+                                    // Beri petunjuk di sini juga
+                                    ->helperText('Cth: "A - Muatan Nasional", "B - Muatan Kewilayahan", "C - Muatan Peminatan Kejuruan"')
+                                    ->required(),
+                            ])
+                            ->defaultItems(3)
+                            ->addActionLabel('Tambah Opsi Kelompok'),
+
+                        // === INI INFO YANG ANDA MAKSUD ===
+                        Forms\Components\Placeholder::make('info_peminatan')
+                            ->label('') // Kosongkan label
+                            ->content('Opsi di bawah ini (Sub-Kelompok) hanya akan digunakan jika Anda menginput Mata Pelajaran yang termasuk dalam Kelompok C (Peminatan Kejuruan).'),
+                        // === AKHIR DARI INFO ===
+
+                        Forms\Components\Repeater::make('sub_kelompok_options')
+                            ->label('Opsi Sub-Kelompok (Peminatan)')
+                            ->schema([
+                                Forms\Components\TextInput::make('nama_sub_kelompok')
+                                    ->label('Nama Sub-Kelompok')
+                                    ->helperText('Cth: "C1. Dasar Bidang Keahlian", "C2. Dasar Program Keahlian", "C3. Kompetensi Keahlian"')
+                                    ->required(),
+                            ])
+                            ->defaultItems(3)
+                            ->addActionLabel('Tambah Opsi Sub-Kelompok'),
+                    ])->columnSpanFull(),
 
                 Forms\Components\Repeater::make('galeris')
                     ->label('Koleksi Gambar')
@@ -101,7 +134,7 @@ class JurusanResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\MataPelajaranRelationManager::class,
         ];
     }
 

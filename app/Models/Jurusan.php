@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,6 +16,8 @@ class Jurusan extends Model
         'deskripsi',
         'logo_jurusan',
         'nama_kepala_jurusan',
+        'kelompok_options',
+        'sub_kelompok_options',
     ];
 
     public static function booted()
@@ -47,5 +50,17 @@ class Jurusan extends Model
     public function galeris()
     {
         return $this->morphMany(Galeri::class, 'galeriable');
+    }
+
+    protected $casts = [
+        'kelompok_options' => 'array',
+        'sub_kelompok_options' => 'array',
+    ];
+
+    public function mataPelajaran(): HasMany
+    {
+        return $this->hasMany(MataPelajaran::class)
+            ->orderBy('kelompok')
+            ->orderBy('urutan');
     }
 }
