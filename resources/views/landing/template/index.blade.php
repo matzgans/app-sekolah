@@ -138,6 +138,9 @@
                         <a class="nav-link {{ request()->is('pengaduan') ? 'active' : '' }}"
                             href="{{ route('pengaduan.index') }}#pengaduan">Pengaduan</a>
                     </li>
+                    <li class="nav-item ms-2">
+                        <a class="btn btn-primary" href="{{ filament()->getLoginUrl() }}">Login</a>
+                    </li>
                 </ul>
 
             </div>

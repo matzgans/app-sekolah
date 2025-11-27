@@ -147,8 +147,10 @@
                     <li class="nav-item"><a class="nav-link" href="#berita">Berita</a></li>
                     <li class="nav-item"><a class="nav-link" href="#galeri">Galeri</a></li>
 
+
                 </ul>
             </div>
+
         </div>
     </nav>
 
