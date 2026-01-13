@@ -1,4 +1,3 @@
-
 name: Deploy Laravel to VPS
 
 on:
@@ -23,25 +22,25 @@ jobs:
           script: |
             cd ${{ secrets.PROJECT_PATH }}
 
-            echo "Ì≥• Pulling code"
+            echo "Pulling code"
             git pull origin main
 
-            echo "‚¨áÔ∏è Maintenance mode"
+            echo "Maintenance mode"
             /www/server/php/84/bin/php artisan down || true
 
-            echo "Ì≥¶ Install dependencies"
+            echo "Install dependencies"
             composer install --no-dev --optimize-autoloader
 
-            echo "Ì∑ÑÔ∏è Migration"
+            echo "Run migration"
             /www/server/php/84/bin/php artisan migrate --force
 
-            echo "Ì∑π Clear & cache"
+            echo "Clear and cache"
             /www/server/php/84/bin/php artisan optimize:clear
             /www/server/php/84/bin/php artisan optimize
 
-            echo "Ì¥ê Fix permission"
+            echo "Fix permission"
             chown -R www:www storage bootstrap/cache
             chmod -R 775 storage bootstrap/cache
 
-            echo "Ì∫Ä App live"
+            echo "App live"
             /www/server/php/84/bin/php artisan up
