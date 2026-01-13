@@ -65,7 +65,7 @@
     <section class="py-5" id="tentang">
         <div class="container">
             <div class="text-center" data-aos="fade-up">
-                <h2 class="display-5 fw-bold">Tentang Sekolah makan Sekolah</h2>
+                <h2 class="display-5 fw-bold">Tentang Sekolah</h2>
                 <p class="lead text-muted mb-5">Mengenal lebih dekat visi, misi, dan pimpinan sekolah kami.</p>
             </div>
             <div class="row g-4 align-items-center">
