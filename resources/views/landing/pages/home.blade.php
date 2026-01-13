@@ -425,7 +425,8 @@
         <div class="container py-5">
             <div class="text-center" data-aos="fade-up">
                 <h2 class="display-5 fw-bold">Fasilitas Sekolah</h2>
-                <p class="lead text-muted mb-5">Kami menyediakan fasilitas terbaik untuk menunjang proses belajar.</p>
+                <p class="lead text-muted mb-5">Menyediakan fasilitas terbaik dan lengkap untuk menunjang proses belajar.
+                </p>
             </div>
 
             @if ($fasilitas->count())
