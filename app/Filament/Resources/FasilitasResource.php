@@ -32,7 +32,8 @@ class FasilitasResource extends Resource
                 Forms\Components\FileUpload::make('foto_fasilitas')
                     ->image()
                     ->imageEditor()
-                    ->maxSize(1024),
+                    ->maxSize(1024)
+                    ->required(),
                 Forms\Components\Select::make('status')
                     ->required()
                     ->options([
