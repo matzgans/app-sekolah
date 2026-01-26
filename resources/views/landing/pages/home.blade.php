@@ -758,8 +758,8 @@
         </div>
     </section>
 
-
-    @if ($pengumuman)
+    {{-- modal pengumuman --}}
+    {{-- @if ($pengumuman)
         <div class="modal fade" id="announcementModal" aria-labelledby="announcementModalLabel" aria-hidden="true"
             tabindex="-1">
             <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -769,18 +769,15 @@
                         <button class="btn-close" data-bs-dismiss="modal" type="button" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        {{-- Tampilkan gambar jika ada --}}
                         @if ($pengumuman->gambar)
                             <img class="img-fluid w-100 mb-3 rounded" src="{{ asset('storage/' . $pengumuman->gambar) }}"
                                 alt="Gambar Pengumuman">
                         @endif
 
-                        {{-- Menampilkan tipe pengumuman sebagai badge --}}
                         <p>
                             <span class="badge bg-primary">{{ ucfirst($pengumuman->tipe) }}</span>
                         </p>
 
-                        {{-- Deskripsi pengumuman, {!! !!} digunakan agar bisa render HTML jika ada --}}
                         <div>
                             {!! $pengumuman->deskripsi !!}
                         </div>
@@ -794,12 +791,13 @@
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                // Langsung inisialisasi dan tampilkan modal tanpa pengecekan apa pun
                 const announcementModal = new bootstrap.Modal(document.getElementById('announcementModal'));
                 announcementModal.show();
             });
         </script>
-    @endif
+    @endif --}}
+
+    {{-- end modal pengumuman --}}
 @endsection
 
 @push('script')
