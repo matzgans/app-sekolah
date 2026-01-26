@@ -9,6 +9,7 @@ Route::get('/prestasi/{slug}', [LandingController::class, 'prestasi'])->name('pr
 Route::get('/jurusan/{slug}', [LandingController::class, 'jurusan'])->name('jurusan.detail');
 Route::get('/kalender', [LandingController::class, 'kalender'])->name('kalender');
 
+Route::get('/pengumuman/{slug}', [LandingController::class, 'pengumuman'])->name('pengumuman.detail');
 
 Route::prefix('pengaduan')->group(function () {
     Route::get('/', [LandingController::class, 'pengaduan'])->name('pengaduan.index');

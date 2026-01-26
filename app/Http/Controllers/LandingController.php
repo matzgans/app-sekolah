@@ -34,6 +34,11 @@ class LandingController extends Controller
         $jurusans = Jurusan::all();
         $fasilitas = Fasilitas::all();
         $ekstrakurikuler = Ekstrakurikuler::paginate(6);
+
+        $pengumumans = Pengumuman::with('jadwals')
+            ->where('status', 'publikasi')
+            ->latest()
+            ->get(); // ← PENTIN
         $prestasis = Prestasi::orderByRaw("
             FIELD(tingkat, 'internasional','nasional','provinsi','kota','sekolah')
         ")->get();
@@ -75,8 +80,17 @@ class LandingController extends Controller
             'jumlahJurusan',
             'pengumuman',
             'gurus',
-            'jumlahGuru'
+            'jumlahGuru',
+            'pengumumans'
         ));
+    }
+
+    public function pengumuman($slug)
+    {
+        $pengumuman = Pengumuman::where('slug', $slug)->first();
+        return view('landing.pages.detail-pengumuman', compact('pengumuman'));
+        $title = $pengumuman->judul;
+        return view('landing.pages.detail-pengumuman', compact('pengumuman', 'title'));
     }
 
 

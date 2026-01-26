@@ -678,6 +678,87 @@
         </div>
     </section>
 
+    {{-- pengumuman --}}
+    <section class="py-5" id="pengumuman">
+        <div class="container">
+            <div class="mb-5 text-center" data-aos="fade-up">
+                <h2 class="display-5 fw-bold">Pengumuman</h2>
+                <p class="lead text-muted">Informasi terbaru dari sekolah kami</p>
+            </div>
+
+            <div class="row g-4">
+                @forelse ($pengumumans as $item)
+                    <div class="col-md-6 col-lg-4" data-aos="fade-up">
+                        <div class="card h-100 border-0 shadow-sm">
+
+                            {{-- Gambar --}}
+                            @if ($item->gambar)
+                                <img class="card-img-top" src="{{ asset('storage/' . $item->gambar) }}"
+                                    alt="{{ $item->judul }}" style="object-fit: cover; height: 200px;">
+                            @endif
+
+                            <div class="card-body d-flex flex-column">
+                                {{-- Tipe --}}
+                                <span class="badge bg-primary-subtle text-primary align-self-start mb-2">
+                                    {{ ucfirst($item->tipe) }}
+                                </span>
+
+                                {{-- Judul --}}
+                                <h5 class="card-title fw-semibold">
+                                    {{ $item->judul }}
+                                </h5>
+
+                                {{-- Deskripsi --}}
+                                <p class="card-text text-muted small mb-3">
+                                    {{ Str::limit(strip_tags($item->deskripsi), 120) }}
+                                </p>
+
+                                {{-- Jadwal (Polymorphic) --}}
+                                <div class="mb-3">
+                                    @if ($item->jadwals?->isNotEmpty())
+                                        <div class="d-flex flex-wrap gap-1">
+                                            @foreach ($item->jadwals as $jadwal)
+                                                <span class="badge bg-light text-dark border">
+                                                    <i class="bi bi-calendar-event me-1"></i>
+                                                    {{ $jadwal->hari }},
+                                                    {{ $jadwal->tanggal }}
+                                                    ({{ $jadwal->waktu }})
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <span class="badge bg-secondary fst-italic opacity-50">
+                                            Tidak ada jadwal
+                                        </span>
+                                    @endif
+                                </div>
+
+                                {{-- Footer --}}
+                                <div class="d-flex justify-content-between align-items-center mt-auto">
+                                    <small class="text-muted">
+                                        {{ $item->created_at->translatedFormat('d F Y') }}
+                                    </small>
+
+                                    <a class="btn btn-sm btn-outline-primary"
+                                        href="{{ route('pengumuman.detail', $item->slug) }}">
+                                        Detail
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="col-12 text-center">
+                        <span class="text-muted fst-italic">
+                            Belum ada pengumuman yang dipublikasikan
+                        </span>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+    </section>
+
+
     @if ($pengumuman)
         <div class="modal fade" id="announcementModal" aria-labelledby="announcementModalLabel" aria-hidden="true"
             tabindex="-1">
