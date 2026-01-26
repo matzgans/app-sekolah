@@ -4,7 +4,7 @@ return [
 
     'resources' => [
         'PermissionResource' => \Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource::class,
-        'RoleResource' => \Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource::class,
+        'RoleResource' => \App\Filament\Resources\RoleResource::class,
     ],
 
     'preload_roles' => true,
@@ -12,6 +12,8 @@ return [
     'preload_permissions' => true,
 
     'navigation_section_group' => 'Menejemen Role Dan Hak Akses', // Default uses language constant
+
+    'navigation_section_label' => 'Role Dan Hak Akses',
 
     'team_model' => \App\Models\Team::class,
 

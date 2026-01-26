@@ -472,25 +472,52 @@
                     <div class="col-lg-3 col-md-6" data-aos="fade-up">
                         <div class="card card-hover h-100 border-0 p-3 text-center shadow-sm">
 
-                            {{-- PERUBAHAN DI SINI --}}
+                            {{-- FOTO / LOGO --}}
                             <img class="rounded-circle mx-auto"
                                 src="{{ $item->logo_ekskul ? Storage::url($item->logo_ekskul) : 'https://placehold.co/100x100/dc3545/fff?text=Logo' }}"
                                 alt="{{ $item->nama_ekskul }}" style="width: 100px; height: 100px; object-fit: cover;">
-                            {{-- AKHIR PERUBAHAN --}}
 
-                            <div class="card-body">
+                            <div class="card-body d-flex flex-column">
                                 <h5 class="fw-bold mt-3">{{ $item->nama_ekskul }}</h5>
-                                <p class="small text-muted">Pembina: {{ $item->nama_pembina }}</p>
+                                <p class="small text-muted mb-3">Pembina: {{ $item->nama_pembina ?? '-' }}</p>
+
+                                {{-- MENAMPILKAN JADWAL --}}
+                                <div class="border-top mt-auto pt-3">
+                                    <h6 class="fw-bold text-uppercase text-secondary mb-2 text-xs"
+                                        style="font-size: 0.75rem;">
+                                        Jadwal
+                                    </h6>
+
+                                    @if (!empty($item->jadwals) && $item->jadwals->count())
+                                        <div class="d-flex justify-content-center flex-wrap gap-1">
+                                            @foreach ($item->jadwals as $jadwal)
+                                                <div
+                                                    class="badge bg-light text-dark border-secondary-subtle fw-normal border">
+                                                    <i class="bi bi-calendar-event me-1"></i> {{ $jadwal->hari }},
+                                                    {{ $jadwal->waktu }}
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <span class="badge bg-secondary fst-italic opacity-50">Belum ada jadwal</span>
+                                    @endif
+                                </div>
+                                {{-- AKHIR JADWAL --}}
+
                             </div>
                         </div>
                     </div>
                 @empty
                     <div class="col-12">
-                        <div class="alert alert-warning">Tidak ada ekstrakurikuler yang tersedia.</div>
+                        <div class="alert alert-warning text-center">
+                            <i class="bi bi-exclamation-triangle me-2"></i> Tidak ada ekstrakurikuler yang tersedia.
+                        </div>
                     </div>
                 @endforelse
-                {{ $ekstrakurikuler->links() }}
 
+                <div class="d-flex justify-content-center mt-4">
+                    {{ $ekstrakurikuler->links() }}
+                </div>
             </div>
         </div>
     </section>

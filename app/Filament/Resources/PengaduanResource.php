@@ -16,7 +16,13 @@ class PengaduanResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Manajemen Pengaduan';
+    protected static ?string $navigationLabel = 'Pengaduan';
     protected static ?int $navigationSort = 1;
+
+    public static function getPluralLabel(): string
+    {
+        return 'Pengaduan';
+    }
 
     public static function form(Form $form): Form
     {
