@@ -58,11 +58,11 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label" for="kontak_pengirim">Email atau No. WhatsApp
-                                        Aktif</label>
+                                    <label class="form-label" for="kontak_pengirim">Email
+                                        Aktif (Wajib)</label>
                                     <input class="form-control @error('kontak_pengirim') is-invalid @enderror"
-                                        id="kontak_pengirim" name="kontak_pengirim" type="text"
-                                        placeholder="Cth : john.doe@example.com atau 081234567890" required>
+                                        id="kontak_pengirim" name="kontak_pengirim" type="email"
+                                        placeholder="Cth : john.doe@example.com" required>
                                     <div class="form-text">Kami akan mengirimkan notifikasi balasan ke sini.</div>
                                     @error('kontak_pengirim')
                                         <div class="text-danger">{{ $message }}</div>

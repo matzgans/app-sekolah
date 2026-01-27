@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Pengaduan\StorePengaduanRequest;
+use App\Mail\SendNotifForPengaduan;
 use App\Models\Berita;
 use App\Models\Ekstrakurikuler;
 use App\Models\Fasilitas;
@@ -15,6 +16,7 @@ use App\Models\Pengumuman;
 use App\Models\Prestasi;
 use App\Models\ProfileSekolah;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class LandingController extends Controller
 {
@@ -202,6 +204,15 @@ class LandingController extends Controller
                 'tanggal_pengaduan'  => now(),
                 'user_id'            => auth()->id(),
             ]);
+
+            Mail::to($validated['kontak_pengirim'])->queue(
+                new SendNotifForPengaduan(
+                    $pengaduan->nama_lengkap,
+                    $pengaduan->no_tiket,
+                    $pengaduan->tanggal_pengaduan->format('d M Y H:i'),
+                    $pengaduan->status_tiket
+                )
+            );
 
             return redirect()
                 ->route('pengaduan.index')
