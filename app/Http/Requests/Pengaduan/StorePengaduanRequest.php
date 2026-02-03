@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Pengaduan;
 
+use App\Rules\Recaptcha;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StorePengaduanRequest extends FormRequest
@@ -30,6 +31,7 @@ class StorePengaduanRequest extends FormRequest
             'kategori_pengaduan' => 'required',
             'jenis_pengaduan' => 'required',
             'file_pengaduan' => 'nullable|file|mimes:pdf,jpg,jpeg,png,ppt,pptx|max:2048',
+            'g-recaptcha-response' => ['required', new Recaptcha],
         ];
     }
 
@@ -49,6 +51,8 @@ class StorePengaduanRequest extends FormRequest
             'file_pengaduan.file' => 'File Pengaduan harus diisi',
             'file_pengaduan.mimes' => 'File Pengaduan harus diisi dengan pdf, jpg, jpeg, png, ppt, atau pptx',
             'file_pengaduan.max' => 'File Pengaduan maksimal 2MB',
+            'g-recaptcha-response.required' => 'Captcha harus diisi',
+            'g-recaptcha-response.recaptcha' => 'Captcha tidak valid',
 
         ];
     }

@@ -2,6 +2,10 @@
 
 @section('title', 'Layanan Pengaduan')
 
+@push('style')
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+@endpush
+
 @section('content')
     <section class="bg-light py-5">
         <div class="container">
@@ -136,6 +140,12 @@
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
+
+                                <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
+
+                                @error('g-recaptcha-response')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
 
                                 <button class="btn btn-primary w-100 fw-bold py-2" type="submit">Kirim
                                     Pengaduan</button>

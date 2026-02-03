@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title')</title>
 
+
     <!-- Bootstrap CSS -->
     <link type="image/x-icon"
         href="{{ optional($profileSekolah)->logo_sekolah ? Storage::url(optional($profileSekolah)->logo_sekolah) : 'https://placehold.co/40x40/0d6efd/fff?text=Logo' }}"

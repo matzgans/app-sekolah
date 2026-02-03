@@ -11,6 +11,10 @@ Route::get('/kalender', [LandingController::class, 'kalender'])->name('kalender'
 
 Route::get('/pengumuman/{slug}', [LandingController::class, 'pengumuman'])->name('pengumuman.detail');
 
+Route::get('/reload-captcha', function () {
+    return response()->json(['captcha' => captcha_img()]);
+});
+
 Route::prefix('pengaduan')->group(function () {
     Route::get('/', [LandingController::class, 'pengaduan'])->name('pengaduan.index');
     Route::post('/store', [LandingController::class, 'store'])->name('pengaduan.store');
