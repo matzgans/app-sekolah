@@ -27,8 +27,7 @@ class FasilitasResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Textarea::make('deskripsi')
-                    ->required()
-                    ->maxLength(255),
+                    ->required(),
                 Forms\Components\FileUpload::make('foto_fasilitas')
                     ->image()
                     ->imageEditor()

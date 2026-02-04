@@ -50,8 +50,8 @@ class PrestasiResource extends Resource
                         'lainnya' => 'Lainnya',
                     ]),
                 Forms\Components\Textarea::make('deskripsi')
-                    ->required()
-                    ->maxLength(255),
+                    ->columnSpanFull()
+                    ->rows(10),
                 Forms\Components\Select::make('tingkat')
                     ->required()
                     ->options([

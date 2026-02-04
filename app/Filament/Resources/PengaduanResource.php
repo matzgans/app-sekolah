@@ -45,8 +45,7 @@ class PengaduanResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Textarea::make('isi_pesan')
-                    ->required()
-                    ->maxLength(255),
+                    ->required(),
                 Forms\Components\Select::make('kategori_pengaduan')
                     ->required()
                     ->options([
