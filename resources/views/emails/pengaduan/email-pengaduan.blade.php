@@ -80,7 +80,8 @@
                             </table>
                             <p style="color: #64748b; font-size: 14px; line-height: 22px; margin: 30px 0 0 0;">
                                 Mohon menunggu, tim kami akan segera menindaklanjuti laporan Anda. Anda akan menerima
-                                notifikasi email selanjutnya jika status berubah.
+                                notifikasi email selanjutnya jika status berubah. Cek Berkala Tiket Anda Di Halaman
+                                Pengaduan.
                             </p>
 
                         </td>
@@ -89,7 +90,7 @@
                     <tr>
                         <td
                             style="background-color: #f1f5f9; padding: 20px; text-align: center; color: #94a3b8; font-size: 12px;">
-                            &copy; {{ date('Y') }} SMKN 2 Paguyaman, All Rights Reserved.
+                            &copy; {{ date('Y') }} {{ env('APP_NAME') }}, All Rights Reserved.
                         </td>
                     </tr>
                 </table>
