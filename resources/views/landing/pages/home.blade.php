@@ -418,42 +418,125 @@
         </div>
     </section>
 
-    </section>
-
     <!-- Fasilitas -->
     <section class="bg-light py-5" id="fasilitas">
         <div class="container py-5">
-            <div class="text-center" data-aos="fade-up">
+            <div class="mb-5 text-center" data-aos="fade-up">
                 <h2 class="display-5 fw-bold">Fasilitas</h2>
-                <p class="lead text-muted mb-5">Menyediakan fasilitas terbaik dan lengkap untuk menunjang proses belajar.
-                </p>
+                <p class="lead text-muted">Menyediakan fasilitas terbaik dan lengkap untuk menunjang proses belajar.</p>
             </div>
 
             @if ($fasilitas->count())
-                <div class="swiper mySwiper-fasilitas">
+                <div class="swiper mySwiper-fasilitas px-2 pb-5">
                     <div class="swiper-wrapper">
                         @foreach ($fasilitas as $item)
-                            <div class="swiper-slide">
-                                <div class="card card-fasilitas h-100 overflow-hidden border-0 text-white shadow-sm">
-                                    {{-- Gambar --}}
-                                    <img class="card-img" src="{{ asset('storage/' . $item->foto_fasilitas) }}"
-                                        alt="{{ $item->nama_fasilitas }}" style="height: 250px; object-fit: cover;">
+                            @php
+                                // Logika Warna Badge
+                                $badgeColor = match ($item->status) {
+                                    'baik' => 'success',
+                                    'kurang_baik' => 'warning',
+                                    'rusak' => 'danger',
+                                    default => 'secondary',
+                                };
+                                $statusText = ucwords(str_replace('_', ' ', $item->status));
+                            @endphp
 
-                                    {{-- Overlay --}}
-                                    <div class="card-img-overlay d-flex flex-column justify-content-end p-0">
-                                        <div class="overlay-content h-100 d-flex flex-column justify-content-end p-4">
-                                            <h4 class="fw-bold">{{ $item->nama_fasilitas }}</h4>
-                                            <p class="card-text">{{ $item->deskripsi }}</p>
+                            <div class="swiper-slide">
+                                <div
+                                    class="card h-100 rounded-4 position-relative overflow-hidden border-0 text-white shadow">
+
+                                    <div class="position-relative" style="height: 300px;">
+                                        <img class="w-100 h-100 object-fit-cover"
+                                            src="{{ asset('storage/' . $item->foto_fasilitas) }}"
+                                            alt="{{ $item->nama_fasilitas }}">
+                                        <div class="position-absolute w-100 h-100 bottom-0 start-0"
+                                            style="background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0));">
+                                        </div>
+                                    </div>
+
+                                    <div class="position-absolute end-0 top-0 p-3">
+                                        <span
+                                            class="badge bg-{{ $badgeColor }} rounded-pill text-uppercase px-3 py-2 shadow-sm">
+                                            {{ $statusText }}
+                                        </span>
+                                    </div>
+
+                                    <div class="card-img-overlay d-flex flex-column justify-content-end p-4">
+                                        <h5 class="card-title fw-bold mb-1">{{ $item->nama_fasilitas }}</h5>
+
+                                        <p class="card-text small text-truncate mb-3 opacity-75">
+                                            {{ $item->deskripsi }}
+                                        </p>
+
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-light rounded-pill stretched-link px-3"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#modalFasilitas-{{ $item->id }}" type="button">
+                                                Lihat Selengkapnya <i class="bi bi-arrow-right ms-1"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
                     </div>
+                    <div class="swiper-pagination"></div>
                 </div>
+
+                @foreach ($fasilitas as $item)
+                    @php
+                        // Kita panggil ulang logika warna untuk modal
+                        $badgeColor = match ($item->status) {
+                            'baik' => 'success',
+                            'kurang_baik' => 'warning',
+                            'rusak' => 'danger',
+                            default => 'secondary',
+                        };
+                        $statusText = ucwords(str_replace('_', ' ', $item->status));
+                    @endphp
+
+                    <div class="modal fade" id="modalFasilitas-{{ $item->id }}" aria-hidden="true" tabindex="-1">
+                        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content rounded-4 overflow-hidden border-0">
+
+                                <div class="position-relative">
+                                    <img class="w-100 object-fit-cover"
+                                        src="{{ asset('storage/' . $item->foto_fasilitas) }}"
+                                        alt="{{ $item->nama_fasilitas }}" style="height: 300px;">
+
+                                    <button
+                                        class="btn-close btn-close-white position-absolute bg-dark rounded-circle end-0 top-0 m-3 bg-opacity-50 p-2"
+                                        data-bs-dismiss="modal" type="button" aria-label="Close"></button>
+
+                                    <div class="position-absolute bottom-0 start-0 m-3">
+                                        <span class="badge bg-{{ $badgeColor }} fs-6 rounded-pill shadow">
+                                            Status: {{ $statusText }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="modal-body p-md-5 p-4">
+                                    <h3 class="fw-bold text-dark mb-3">{{ $item->nama_fasilitas }}</h3>
+
+                                    <div class="text-muted" style="line-height: 1.8;">
+                                        {!! nl2br(e($item->deskripsi)) !!}
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer bg-light border-0">
+                                    <button class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal"
+                                        type="button">Tutup</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             @else
-                <div class="alert alert-warning text-center">
-                    Saat ini belum ada data fasilitas yang dapat ditampilkan.
+                <div class="alert alert-warning rounded-3 border-0 p-4 text-center shadow-sm">
+                    <p class="fw-bold mb-0">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        Saat ini belum ada data fasilitas yang dapat ditampilkan.
+                    </p>
                 </div>
             @endif
         </div>
